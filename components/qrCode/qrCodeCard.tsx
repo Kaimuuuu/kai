@@ -1,5 +1,4 @@
 import { Stack, Card as MuiCard, Box, Modal } from "@mui/material";
-import Image from "next/image";
 import SubHeading from "../typo/subHeading";
 import Body from "../typo/body";
 import { QrCode as QrCodeType } from "@/types";
@@ -8,6 +7,7 @@ import Button from "../button";
 import { useState } from "react";
 import ModalStack from "../modalStack";
 import CheckoutSummaryModal from "./checkoutSummaryModal";
+import MyImage from "../image";
 
 interface Props {
   qrCode: QrCodeType;
@@ -30,6 +30,7 @@ export default function QrCodeCard({ qrCode }: Props) {
           <Stack spacing={"10px"}>
             <div
               style={{
+                filter: "blur(4px)",
                 maxWidth: "130px",
                 maxHeight: "130px",
                 borderRadius: "16px",
@@ -37,14 +38,7 @@ export default function QrCodeCard({ qrCode }: Props) {
                 height: "fit-content",
               }}
             >
-              <Image
-                style={{ filter: "blur(4px)" }}
-                src={`${process.env.BACKEND_URL}/qrcode/${qrCode.token}`}
-                alt="Next.js Logo"
-                width={130}
-                height={130}
-                priority
-              />
+              <MyImage imagePath={`qrcode/${qrCode.token}`} />
             </div>
             <Button myVariant="secondary" label="ดู" onClick={onOpenViewModal} />
           </Stack>
@@ -70,16 +64,10 @@ export default function QrCodeCard({ qrCode }: Props) {
                 borderRadius: "16px",
                 overflow: "hidden",
                 height: "fit-content",
-                margin: "auto",
+                margin: "auto", 
               }}
             >
-              <Image
-                src={`${process.env.BACKEND_URL}/qrcode/${qrCode.token}`}
-                alt="Next.js Logo"
-                width={300}
-                height={300}
-                priority
-              />
+              <MyImage imagePath={`qrcode/${qrCode.token}`} width={300} height={300} />
             </div>
             {/* <Button label='ปริ้น' /> */}
             <Button label="ปิด" myVariant="secondary" onClick={onCloseViewModal} />

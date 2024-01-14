@@ -1,5 +1,5 @@
 import { ID_MENU_CARD } from "@/constants";
-import Image from "next/image";
+import MyImage from "./image";
 
 interface Props {
   menuItemId: string;
@@ -25,13 +25,7 @@ export default function RecommandCard({ menuItemId, imagePath }: Props) {
         flexShrink: 0,
       }}
     >
-      <Image
-        src={`${process.env.BACKEND_URL}/${imagePath}`}
-        alt="Next.js Logo"
-        width={100}
-        height={100}
-        priority
-      />
+      <MyImage imagePath={imagePath} width={100} height={100} />
     </div>
   );
 }

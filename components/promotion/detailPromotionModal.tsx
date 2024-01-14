@@ -1,6 +1,5 @@
 import { Box, MenuItem, Modal, Select, Stack } from "@mui/material";
 import ModalStack from "../modalStack";
-import Image from "next/image";
 import TextField from "../textField";
 import Title from "../typo/title";
 import Button from "../button";
@@ -18,6 +17,7 @@ import {
   SELECT_LABEL_PROMOTION_MENU_ITEM_NONE,
 } from "@/constants";
 import useSearch from "@/hooks/useSearch";
+import MyImage from "../image";
 
 interface Props {
   promotion: Promotion;
@@ -65,13 +65,7 @@ export default function DetailPromotionModal({ promotion, state, onOpen, onClose
                   height: "fit-content",
                 }}
               >
-                <Image
-                  src="https://miro.medium.com/v2/resize:fit:1140/1*MxljsIAuPTci8V2Zdyjywg.jpeg"
-                  alt="Next.js Logo"
-                  width={130}
-                  height={130}
-                  priority
-                />
+                <MyImage imagePath={promotion.imagePath} />
               </div>
             </div>
             <Stack spacing={"10px"} width={"100%"}>

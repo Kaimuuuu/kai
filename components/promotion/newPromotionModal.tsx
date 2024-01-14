@@ -1,12 +1,11 @@
 import { Box, MenuItem, Modal, Select, Stack } from "@mui/material";
 import ModalStack from "../modalStack";
-import Image from "next/image";
 import TextField from "../textField";
 import Title from "../typo/title";
 import IOSSwitch from "../switch";
 import Button from "../button";
 import { CreatePromotionRequest, PromotionMenuItem, PromotionMenuItemType } from "@/types";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import TextArea from "../textArea";
 import { createPromotion } from "@/services/promotionService";
@@ -14,7 +13,18 @@ import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { getEditMenu } from "@/services/menuService";
 import { toNanoSecond } from "@/util/duration";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
+import {
+  LOCAL_STORAGE_EMPLOYEE_TOKEN,
+  SELECT_LABEL_PROMOTION_MENU_ITEM_ALACARTE,
+  SELECT_LABEL_PROMOTION_MENU_ITEM_BUFFET,
+  SELECT_LABEL_PROMOTION_MENU_ITEM_DEFAULT,
+  SELECT_LABEL_PROMOTION_MENU_ITEM_NONE,
+} from "@/constants";
+import useSearch from "@/hooks/useSearch";
+import usePreviewImage from "@/hooks/usePreviewImage";
+import { uploadImage } from "@/services/imageService";
+import MyImage from "../image";
+import Body from "../typo/body";
 
 interface Props {
   state: boolean;
@@ -24,10 +34,17 @@ interface Props {
 
 export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
   const [selectedFilterer, setSelectedFilterer] = useState<-1 | PromotionMenuItemType>(-1);
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const [promotionMenuItems, setPromotionMenuItems] = useState<PromotionMenuItem[]>([]);
+  const [filterdPromotionMenuItems, setSearchQuery] = useSearch(
+    promotionMenuItems,
+    (promotionMenuItems, searchQuery) =>
+      promotionMenuItems.filter((promotionMenuItem) =>
+        promotionMenuItem.menuItem.name.includes(searchQuery),
+      ),
+  );
   const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
   const [noLimitTime, setNoLimitTime] = useState<boolean>(false);
+  const [imageFile, setImageFile, previewUrl] = usePreviewImage();
 
   const MAX_DURATION = toNanoSecond(99, 59);
 
@@ -45,12 +62,19 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
       .catch((err) => console.log(err));
   }, [token]);
 
-  const filteredPromotionMenuItemsType = promotionMenuItems.filter((promotionMenuItem) =>
+  const filteredPromotionMenuItemsType = filterdPromotionMenuItems.filter((promotionMenuItem) =>
     selectedFilterer !== -1 ? promotionMenuItem.type === selectedFilterer : promotionMenuItem,
   );
-  const filterdPromotionMenuItems = filteredPromotionMenuItemsType.filter((promotionMenuItem) =>
-    promotionMenuItem.menuItem.name.includes(searchQuery),
-  );
+
+  const onBrowseImage = () => {
+    document.getElementById("image")?.click();
+  };
+
+  const onChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImageFile(e.target.files[0]);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -62,11 +86,18 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
       description: "",
     },
     onSubmit: async (values) => {
+      let imagePath = "";
+      if (imageFile) {
+        imagePath = await uploadImage(token, imageFile);
+      }
+
+      console.log(values)
+
       const req: CreatePromotionRequest = {
         name: values.name,
         weight: Number(values.weight),
         price: Number(values.price),
-        imagePath: "5280299_8rBqOCmjF75De_ZfwL1cBkjm30ZsF7Y542g7jhDhTIQ.jpg",
+        imagePath: imagePath,
         duration: Number(
           noLimitTime ? MAX_DURATION : toNanoSecond(Number(values.hours), Number(values.minutes)),
         ),
@@ -95,6 +126,7 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
         <ModalStack>
           <Stack direction={"row"} spacing="12px">
             <div>
+              <input type="file" id="image" style={{ display: "none" }} onChange={onChangeImage} />
               <div
                 style={{
                   maxWidth: "130px",
@@ -103,15 +135,11 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
                   overflow: "hidden",
                   height: "fit-content",
                 }}
+                onClick={onBrowseImage}
               >
-                <Image
-                  src="https://miro.medium.com/v2/resize:fit:1140/1*MxljsIAuPTci8V2Zdyjywg.jpeg"
-                  alt="Next.js Logo"
-                  width={130}
-                  height={130}
-                  priority
-                />
+                <MyImage imagePath={previewUrl} frontend />
               </div>
+              <Body>**คลิกที่รูปเพื่อเลือกรูปภาพ**</Body>
             </div>
             <Stack spacing={"10px"} width={"100%"}>
               <TextField
@@ -147,24 +175,24 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
                   label="ชั่วโมง"
                   name="hours"
                   onChange={formik.handleChange}
-                  disabled={noLimitTime}
                   type="number"
                   InputProps={{ inputProps: { min: 0, max: 99 } }}
+                  value={noLimitTime ? 99 : formik.values.hours}
                   required
                 />
                 <TextField
                   label="นาที"
                   name="minutes"
                   onChange={formik.handleChange}
-                  disabled={noLimitTime}
                   type="number"
                   InputProps={{ inputProps: { min: 0, max: 59 } }}
+                  value={noLimitTime ? 59 : formik.values.minutes}
                   required
                 />
               </Stack>
             </Stack>
           </Stack>
-          <TextArea label="คำอธิบาย" name="description" onChange={formik.handleChange} required />
+          <TextArea label="คำอธิบาย" name="description" onChange={formik.handleChange} />
           <Stack direction={"row"} spacing={"10px"}>
             <Stack direction={"row"} alignItems={"center"} spacing={"4px"}>
               <Title>แสดงเฉพาะ: </Title>
@@ -185,16 +213,16 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
                 }}
               >
                 <MenuItem value={-1}>
-                  <Title>-</Title>
+                  <Title>{SELECT_LABEL_PROMOTION_MENU_ITEM_DEFAULT}</Title>
                 </MenuItem>
                 <MenuItem value={PromotionMenuItemType.None}>
-                  <Title>ไม่แสดง</Title>
+                  <Title>{SELECT_LABEL_PROMOTION_MENU_ITEM_NONE}</Title>
                 </MenuItem>
                 <MenuItem value={PromotionMenuItemType.Buffet}>
-                  <Title>Buffet</Title>
+                  <Title>{SELECT_LABEL_PROMOTION_MENU_ITEM_BUFFET}</Title>
                 </MenuItem>
                 <MenuItem value={PromotionMenuItemType.ALaCarte}>
-                  <Title>A La Carte</Title>
+                  <Title>{SELECT_LABEL_PROMOTION_MENU_ITEM_ALACARTE}</Title>
                 </MenuItem>
               </Select>
             </Stack>
@@ -214,7 +242,7 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
             maxHeight={"330px"}
             sx={{ overflowY: "auto" }}
           >
-            {filterdPromotionMenuItems.map((promotionMenuItem) => (
+            {filteredPromotionMenuItemsType.map((promotionMenuItem) => (
               <Stack
                 direction={"row"}
                 spacing={"4px"}
@@ -245,13 +273,13 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
                   }}
                 >
                   <MenuItem value={PromotionMenuItemType.None}>
-                    <Title>ไม่แสดง</Title>
+                    <Title>{SELECT_LABEL_PROMOTION_MENU_ITEM_NONE}</Title>
                   </MenuItem>
                   <MenuItem value={PromotionMenuItemType.Buffet}>
-                    <Title>Buffet</Title>
+                    <Title>{SELECT_LABEL_PROMOTION_MENU_ITEM_BUFFET}</Title>
                   </MenuItem>
                   <MenuItem value={PromotionMenuItemType.ALaCarte}>
-                    <Title>A La Carte</Title>
+                    <Title>{SELECT_LABEL_PROMOTION_MENU_ITEM_ALACARTE}</Title>
                   </MenuItem>
                 </Select>
                 <Title>{promotionMenuItem.menuItem.name}</Title>

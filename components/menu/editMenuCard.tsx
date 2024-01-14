@@ -1,6 +1,5 @@
 import { Stack } from "@mui/material";
 import Card from "@mui/material/Card";
-import Image from "next/image";
 import SubHeading from "../typo/subHeading";
 import Body from "../typo/body";
 import { MenuItem } from "@/types";
@@ -10,6 +9,7 @@ import { useState } from "react";
 import { toggleOutOfStock } from "@/services/menuService";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
+import MyImage from "../image";
 
 interface Props {
   menuItem: MenuItem;
@@ -48,13 +48,7 @@ export default function EditMenuCard({ menuItem }: Props) {
                 height: "fit-content",
               }}
             >
-              <Image
-                src={`${process.env.BACKEND_URL}/${menuItem.imagePath}`}
-                alt="Next.js Logo"
-                width={130}
-                height={130}
-                priority
-              />
+              <MyImage imagePath={menuItem.imagePath} />
             </div>
           </div>
           <Stack sx={{ width: "100%" }}>

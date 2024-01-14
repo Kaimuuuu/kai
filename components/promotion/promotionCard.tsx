@@ -1,5 +1,4 @@
 import { Stack, Card as MuiCard } from "@mui/material";
-import Image from "next/image";
 import { Promotion } from "@/types";
 import { useState } from "react";
 import SubHeading from "../typo/subHeading";
@@ -7,6 +6,7 @@ import Body from "../typo/body";
 import Button from "../button";
 import GenerateQrCodeModal from "./generateQrCodeModal";
 import DetailPromotionModal from "./detailPromotionModal";
+import MyImage from "../image";
 
 interface Props {
   promotion: Promotion;
@@ -36,13 +36,7 @@ export default function PromotionCard({ promotion }: Props) {
                 height: "fit-content",
               }}
             >
-              <Image
-                src={`${process.env.BACKEND_URL}/${promotion.imagePath}`}
-                alt="Next.js Logo"
-                width={130}
-                height={130}
-                priority
-              />
+              <MyImage imagePath={promotion.imagePath} />
             </div>
           </div>
           <Stack sx={{ width: "100%" }}>

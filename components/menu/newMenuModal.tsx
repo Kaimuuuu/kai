@@ -1,18 +1,19 @@
 import { Modal, Stack } from "@mui/material";
-import Image from "next/image";
 import ModalStack from "../modalStack";
 import TextArea from "../textArea";
 import Button from "../button";
 import TextField from "../textField";
-import SubHeading from "../typo/subHeading";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent } from "react";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { CreateMenuRequest } from "@/types";
 import { createMenu } from "@/services/menuService";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { DEFAULT_IMAGE_PATH, LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
+import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
 import { uploadImage } from "@/services/imageService";
+import usePreviewImage from "@/hooks/usePreviewImage";
+import MyImage from "../image";
+import Body from "../typo/body";
 
 interface Props {
   state: boolean;
@@ -21,13 +22,8 @@ interface Props {
 }
 
 export default function NewMenuModal({ state, onClose, onOpen }: Props) {
-  const [imageFile, setImageFile] = useState<File>();
+  const [imageFile, setImageFile, previewUrl] = usePreviewImage();
   const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
-
-  let previewUrl = DEFAULT_IMAGE_PATH;
-  if (imageFile) {
-    previewUrl = URL.createObjectURL(imageFile);
-  }
 
   const onBrowseImage = () => {
     document.getElementById("image")?.click();
@@ -89,23 +85,12 @@ export default function NewMenuModal({ state, onClose, onOpen }: Props) {
                   borderRadius: "16px",
                   overflow: "hidden",
                   height: "fit-content",
-                  position: "relative",
                 }}
                 onClick={onBrowseImage}
               >
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "30%",
-                    left: "5%",
-                    textAlign: "center",
-                    color: "#FF6D4D",
-                  }}
-                >
-                  <SubHeading>Click to browse an image</SubHeading>
-                </div>
-                <Image src={previewUrl} alt="Next.js Logo" width={130} height={130} priority />
+                <MyImage imagePath={previewUrl} frontend />
               </div>
+              <Body>**คลิกที่รูปเพื่อเลือกรูปภาพ**</Body>
             </div>
             <Stack spacing={"10px"} width={"100%"}>
               <TextField

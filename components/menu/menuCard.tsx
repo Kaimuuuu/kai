@@ -1,11 +1,11 @@
 import { Chip, Stack, Card as MuiCard, Box } from "@mui/material";
-import Image from "next/image";
 import Button from "../button";
 import SubHeading from "../typo/subHeading";
 import Body from "../typo/body";
 import { MenuItem } from "@/types";
 import Card from "../card";
 import { ID_MENU_CARD } from "@/constants";
+import MyImage from "../image";
 
 interface Props {
   menuItem: MenuItem;
@@ -41,13 +41,7 @@ export default function MenuCard({ menuItem, quantity, onAdd, onRemove }: Props)
                 height: "fit-content",
               }}
             >
-              <Image
-                src={`${process.env.BACKEND_URL}/${menuItem.imagePath}`}
-                alt="Next.js Logo"
-                width={130}
-                height={130}
-                priority
-              />
+              <MyImage imagePath={menuItem.imagePath} />
             </div>
           </div>
           <Stack sx={{ width: "100%" }}>
