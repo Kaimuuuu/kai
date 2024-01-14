@@ -1,0 +1,92 @@
+import {
+  CreatePromotionRequest,
+  MenuItem,
+  Promotion,
+  PromotionMenuItem,
+  PromotionMenuItemType,
+} from "@/types";
+
+export async function getPromotion(token: string) {
+  const res = await fetch(`${process.env.BACKEND_URL}/promotion`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const promotions: Promotion[] = await res.json();
+
+  return promotions;
+}
+
+export async function generateQrCode(
+  token: string,
+  promotionId: string,
+  tableNumber: string,
+  size: string,
+) {
+  const res = await fetch(`${process.env.BACKEND_URL}/client`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      promotionId: promotionId,
+      tableNumber: Number(tableNumber),
+      size: Number(size),
+    }),
+  });
+
+  if (res.status !== 200) {
+    throw new Error();
+  }
+
+  const data: { clientToken: string } = await res.json();
+
+  return data.clientToken;
+}
+
+export async function getPromotionMenuItems(
+  token: string,
+  promotionId: string,
+): Promise<PromotionMenuItem[]> {
+  const res = await fetch(`${process.env.BACKEND_URL}/promotion/${promotionId}/menu`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const promotionMenuItems: PromotionMenuItem[] = await res.json();
+
+  return promotionMenuItems;
+}
+
+export async function createPromotion(token: string, req: CreatePromotionRequest): Promise<void> {
+  const res = await fetch(`${process.env.BACKEND_URL}/promotion`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(req),
+  });
+
+  console.log(res.body);
+
+  if (res.status !== 200) {
+    throw new Error();
+  }
+}
+
+export async function getWeight(token: string): Promise<number> {
+  const res = await fetch(`${process.env.BACKEND_URL}/promotion/weight`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data: { weight: number } = await res.json();
+
+  return data.weight;
+}

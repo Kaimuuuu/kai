@@ -1,95 +1,160 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import Button from "@/components/button";
+import TextField from "@/components/textField";
+import MenuCard from "@/components/menu/menuCard";
+import Heading from "@/components/typo/heading";
+import { getMenu } from "@/services/menuService";
+import { CartItem, Menu, MenuItem } from "@/types";
+import { Container, Stack } from "@mui/material";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import SummaryOrderHistoryModal from "@/components/order/summaryOrderHistoryModal";
+import SummaryOrderModal from "@/components/order/summaryOrderModal";
+import useSearch from "@/hooks/useSearch";
+import Recommands from "@/components/recommands";
+import Tags from "@/components/tags";
+import { ID_MENU_CATAGORY, LOCAL_STORAGE_CLIENT_TOKEN } from "@/constants";
 
 export default function Home() {
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [menus, setMenus] = useState<Menu[]>([]);
+  const [filteredMenus, setSearchQuery] = useSearch(menus, (menus, searchQuery) =>
+    menus.map((menu) => ({
+      catagory: menu.catagory,
+      items: menu.items.filter((menuItem) => menuItem.name.includes(searchQuery)),
+    })),
+  );
+  const [summaryOderModal, setSummaryOrderModal] = useState<boolean>(false);
+  const [summaryOrderHistoryModal, setSummaryOrderHistoryModal] = useState<boolean>(false);
+  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_CLIENT_TOKEN, "");
+
+  useEffect(() => {
+    getMenu(token)
+      .then((menus) => {
+        setMenus(menus);
+      })
+      .catch((err) => console.log(err));
+  }, [token]);
+
+  const tags = menus.map((menu) => menu.catagory);
+
+  const addMenuItem = (menuItem: MenuItem) => {
+    const cartItem = cart.find((cartItem) => cartItem.menuItemId == menuItem.id);
+
+    if (cartItem !== undefined) {
+      ++cartItem.quantity;
+      setCart([...cart]);
+    } else {
+      const newCartItem = {
+        menuItemId: menuItem.id,
+        name: menuItem.name,
+        quantity: 1,
+        price: menuItem.price,
+        weight: menuItem.weight,
+      };
+
+      setCart([...cart, newCartItem]);
+    }
+
+    console.log(cart);
+  };
+
+  const removeMenuItem = (menuItemId: string) => {
+    const cartItem = cart.find((cartItem) => cartItem.menuItemId == menuItemId);
+
+    if (cartItem !== undefined) {
+      --cartItem.quantity;
+      setCart([...cart]);
+
+      if (cartItem.quantity === 0) {
+        setCart(cart.filter((cartItem) => cartItem.menuItemId !== menuItemId));
+      }
+    }
+
+    console.log(cart);
+  };
+
+  const resetCart = () => setCart([]);
+
+  const onClickReset = () => {
+    Swal.fire({
+      title: "ต้องการที่จะรีเซ็ตคำสั่งอาหารในรถเข็นทั้งหมด?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "ตกลง",
+      cancelButtonText: "ยกเลิก",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        resetCart();
+      }
+    });
+  };
+
+  const onOpenSummaryOrderHistoryModal = () => setSummaryOrderHistoryModal(true);
+  const onCloseSummaryOrderHistoryModal = () => setSummaryOrderHistoryModal(false);
+
+  const onOpenSummaryOrderModal = () => setSummaryOrderModal(true);
+  const onCloseSummaryOrderModal = () => setSummaryOrderModal(false);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+    <main
+      style={{
+        backgroundColor: "#FAFAFA",
+        paddingTop: "20px",
+        paddingBottom: "20px",
+        minHeight: "100vh",
+      }}
+    >
+      <Container>
+        <Recommands />
+        <Tags tags={tags} />
+        <Stack sx={{ paddingBottom: "12px" }}>
+          <Stack direction={"row"} spacing={1} paddingTop={2} paddingBottom={2}>
+            <Stack direction={"row"} spacing={1} width={"100%"}>
+              <Button
+                myVariant="secondary"
+                label="ยอดรวม"
+                onClick={onOpenSummaryOrderHistoryModal}
+              />
+              <Button myVariant="secondary" label="รีเซ็ต" onClick={onClickReset} />
+            </Stack>
+            <Button label="สั่งอาหาร" onClick={onOpenSummaryOrderModal} />
+          </Stack>
+          <TextField label="ค้นหาตามชื่อเมนู" onChange={(e) => setSearchQuery(e.target.value)} />
+        </Stack>
+        <Stack spacing={2}>
+          {filteredMenus.map((menu) => (
+            <Stack spacing={1} key={menu.catagory} id={`${ID_MENU_CATAGORY}_${menu.catagory}`}>
+              <Heading>{menu.catagory}</Heading>
+              {menu.items.map((menuItem) => (
+                <MenuCard
+                  key={menuItem.id}
+                  menuItem={menuItem}
+                  quantity={
+                    cart.find((cartItem) => cartItem.menuItemId === menuItem.id)?.quantity ?? 0
+                  }
+                  onAdd={addMenuItem}
+                  onRemove={removeMenuItem}
+                />
+              ))}
+            </Stack>
+          ))}
+        </Stack>
+      </Container>
+      <SummaryOrderHistoryModal
+        state={summaryOrderHistoryModal}
+        onOpen={onOpenSummaryOrderHistoryModal}
+        onClose={onCloseSummaryOrderHistoryModal}
+      />
+      <SummaryOrderModal
+        state={summaryOderModal}
+        onOpen={onOpenSummaryOrderModal}
+        onClose={onCloseSummaryOrderModal}
+        cart={cart}
+        resetCart={resetCart}
+      />
     </main>
-  )
+  );
 }
