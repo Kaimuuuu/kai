@@ -48,8 +48,12 @@ export default function EditMenu() {
       <Container>
         <Navbar />
         <Stack alignItems={"center"} spacing={"10px"}>
-          <Button label="เพิ่มเมนูอาหาร" onClick={onOpenNewMenuModal} />
-          <TextField label="ค้นหาเมนูตามชื่อ" onChange={(e) => setSearchQuery(e.target.value)} />
+          <Stack direction={'row'} width={'100%'} spacing={'10px'}>
+            <Box width={'30%'}>
+              <Button label="เพิ่มเมนู" onClick={onOpenNewMenuModal} />
+            </Box>
+            <TextField label="ค้นหาเมนูตามชื่อ" onChange={(e) => setSearchQuery(e.target.value)} />
+          </Stack>
           <Stack spacing={2} width={"100%"}>
             {filterdMenus.map((menu) => (
               <Stack spacing={1} key={menu.catagory}>
