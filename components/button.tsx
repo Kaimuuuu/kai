@@ -18,12 +18,12 @@ export default function Button({ label, myVariant, ...props }: Props & ButtonPro
           myVariant !== "secondary" ? (myVariant === "error" ? "#D12600" : "#FF6D4D") : "#E6E6E5",
         borderRadius: "32px",
         fontWeight: "bold",
-        width: "100%",
         minWidth: "0px",
         color: myVariant === "secondary" ? "black" : "white",
       }}
       variant="contained"
       disableElevation
+      fullWidth
       {...props}
     >
       <Title>{label}</Title>

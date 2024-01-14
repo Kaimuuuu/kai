@@ -1,4 +1,4 @@
-import { Menu, MenuItem } from "@/types";
+import { CreateMenuRequest, Menu, MenuItem } from "@/types";
 
 export async function getMenu(token: string): Promise<Menu[]> {
   const res = await fetch(`${process.env.BACKEND_URL}/menu`, {
@@ -56,6 +56,21 @@ export async function getRecommand(token: string): Promise<MenuItem[]> {
   const data: MenuItem[] = await res.json();
 
   return data;
+}
+
+export async function createMenu(token: string, req: CreateMenuRequest): Promise<void> {
+  const res = await fetch(`${process.env.BACKEND_URL}/menu`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "Application/json",
+    },
+    body: JSON.stringify(req),
+  });
+
+  if (res.status !== 200) {
+    throw new Error();
+  }
 }
 
 function menuItemsToMenuList(menuItems: MenuItem[]): Menu[] {

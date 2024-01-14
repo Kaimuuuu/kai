@@ -6,21 +6,24 @@ import Navbar from "@/components/layout/navbar";
 import Heading from "@/components/typo/heading";
 import { getEditMenu } from "@/services/menuService";
 import { Menu } from "@/types";
-import { Container, Stack } from "@mui/material";
+import { Box, Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useSearch from "@/hooks/useSearch";
 import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
+import Button from "@/components/button";
+import NewMenuModal from "@/components/menu/newMenuModal";
 
 export default function EditMenu() {
   const [menus, setMenus] = useState<Menu[]>([]);
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
   const [filterdMenus, setSearchQuery] = useSearch(menus, (menus, searchQuery) =>
     menus.map((menu) => ({
       catagory: menu.catagory,
       items: menu.items.filter((item) => item.name.includes(searchQuery)),
     })),
   );
+  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const [newMenuModal, setNewMenuModal] = useState<boolean>(false);
 
   useEffect(() => {
     getEditMenu(token)
@@ -29,6 +32,9 @@ export default function EditMenu() {
       })
       .catch((err) => console.log(err));
   }, [token]);
+
+  const onOpenNewMenuModal = () => setNewMenuModal(true);
+  const onCloseNewMenuModal = () => setNewMenuModal(false);
 
   return (
     <main
@@ -42,6 +48,7 @@ export default function EditMenu() {
       <Container>
         <Navbar />
         <Stack alignItems={"center"} spacing={"10px"}>
+          <Button label="เพิ่มเมนูอาหาร" onClick={onOpenNewMenuModal} />
           <TextField label="ค้นหาเมนูตามชื่อ" onChange={(e) => setSearchQuery(e.target.value)} />
           <Stack spacing={2} width={"100%"}>
             {filterdMenus.map((menu) => (
@@ -54,6 +61,11 @@ export default function EditMenu() {
             ))}
           </Stack>
         </Stack>
+        <NewMenuModal
+          state={newMenuModal}
+          onClose={onCloseNewMenuModal}
+          onOpen={onOpenNewMenuModal}
+        />
       </Container>
     </main>
   );

@@ -49,7 +49,7 @@ export default function EditMenuCard({ menuItem }: Props) {
               }}
             >
               <Image
-                src={`http://localhost:3001/${menuItem.imagePath}`}
+                src={`${process.env.BACKEND_URL}/${menuItem.imagePath}`}
                 alt="Next.js Logo"
                 width={130}
                 height={130}

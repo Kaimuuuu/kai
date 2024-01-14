@@ -94,6 +94,16 @@ export enum PromotionMenuItemType {
   None,
 }
 
+export interface CheckoutSummaryObject {
+  tableNumber: number;
+  promotionName: string;
+  size: number;
+  remainingDuration: number;
+  createdAt: Date;
+  totalPrice: number;
+  orderItems: OrderItem[];
+}
+
 export interface CreatePromotionRequest {
   name: string;
   weight: number;
@@ -104,12 +114,12 @@ export interface CreatePromotionRequest {
   promotionMenuItems: { type: PromotionMenuItemType; menuItemId: string }[];
 }
 
-export interface CheckoutSummaryObject {
-  tableNumber: number;
-  promotionName: string;
-  size: number;
-  remainingDuration: number;
-  createdAt: Date;
-  totalPrice: number;
-  orderItems: OrderItem[];
+export interface CreateMenuRequest {
+  name: string;
+  catagory: string;
+  weight: number;
+  description: string;
+  outOfStock: boolean;
+  price: number;
+  imagePath: string;
 }
