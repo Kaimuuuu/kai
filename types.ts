@@ -123,3 +123,12 @@ export interface CreateMenuRequest {
   price: number;
   imagePath: string;
 }
+
+export interface UpdateMenuRequest {
+  name: string;
+  catagory: string;
+  weight: number;
+  description: string;
+  price: number;
+  imagePath: string;
+}

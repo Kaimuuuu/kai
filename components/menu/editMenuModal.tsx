@@ -6,8 +6,8 @@ import TextField from "../textField";
 import { ChangeEvent } from "react";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
-import { CreateMenuRequest } from "@/types";
-import { createMenu } from "@/services/menuService";
+import { CreateMenuRequest, MenuItem, UpdateMenuRequest } from "@/types";
+import { createMenu, deleteMenu, updateMenu } from "@/services/menuService";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
 import { uploadImage } from "@/services/imageService";
@@ -16,13 +16,20 @@ import MyImage from "../image";
 import Body from "../typo/body";
 
 interface Props {
+  menuItem: MenuItem;
   state: boolean;
   onClose: () => void;
   onOpen: () => void;
   refreshEditMenus: () => void;
 }
 
-export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus }: Props) {
+export default function EditMenuModal({
+  menuItem,
+  state,
+  onClose,
+  onOpen,
+  refreshEditMenus,
+}: Props) {
   const [imageFile, setImageFile, previewUrl] = usePreviewImage();
   const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
 
@@ -36,35 +43,58 @@ export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus 
     }
   };
 
+  const onDelete = () => {
+    onClose();
+    Swal.fire({
+      title: `ต้องการที่จะลบเมนูอาหาร "${menuItem.name}"?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "ตกลง",
+      cancelButtonText: "ยกเลิก",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteMenu(token, menuItem.id)
+          .then(() => {
+            refreshEditMenus();
+            Swal.fire({
+              title: "ลบเมนูสำเร็จ",
+              icon: "success",
+              confirmButtonText: "ตกลง",
+            });
+          })
+          .catch((err) => console.log(err));
+      }
+    });
+  };
+
   const formik = useFormik({
     initialValues: {
-      name: "",
-      catagory: "",
-      weight: "",
-      description: "",
-      price: "",
+      name: menuItem.name,
+      catagory: menuItem.catagory,
+      weight: menuItem.weight,
+      description: menuItem.description,
+      price: menuItem.price,
     },
     onSubmit: async (values) => {
-      let imagePath = "";
+      let imagePath = menuItem.imagePath;
       if (imageFile) {
         imagePath = await uploadImage(token, imageFile);
       }
 
-      const req: CreateMenuRequest = {
+      const req: UpdateMenuRequest = {
         name: values.name,
         catagory: values.catagory,
         weight: Number(values.weight),
         description: values.description,
         price: Number(values.price),
         imagePath: imagePath,
-        outOfStock: false,
       };
-      createMenu(token, req)
+      updateMenu(token, req, menuItem.id)
         .then(() => {
           onClose();
           refreshEditMenus();
           Swal.fire({
-            title: "สร้างเมนูสำเร็จ",
+            title: "แก้ไขเมนูสำเร็จ",
             icon: "success",
             confirmButtonText: "ตกลง",
           });
@@ -90,7 +120,10 @@ export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus 
                 }}
                 onClick={onBrowseImage}
               >
-                <MyImage imagePath={previewUrl} frontend />
+                <MyImage
+                  imagePath={!imageFile ? menuItem.imagePath : previewUrl}
+                  frontend={imageFile !== undefined}
+                />
               </div>
               <Body>**คลิกที่รูปเพื่อเลือกรูปภาพ**</Body>
             </div>
@@ -99,6 +132,7 @@ export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus 
                 label="ชื่อรายการอาหาร"
                 name="name"
                 onChange={formik.handleChange}
+                value={formik.values.name}
                 required
               />
               <Stack direction={"row"} spacing={"10px"}>
@@ -106,30 +140,39 @@ export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus 
                   label="หมวดหมู่"
                   name="catagory"
                   onChange={formik.handleChange}
+                  value={formik.values.catagory}
                   required
                 />
                 <TextField
                   label="น้ำหนัก"
                   name="weight"
                   onChange={formik.handleChange}
+                  value={formik.values.weight}
                   required
                   type="number"
                   InputProps={{ inputProps: { min: 0 } }}
                 />
               </Stack>
-              <TextArea label="คำอธิบาย" name="description" onChange={formik.handleChange} />
+              <TextArea
+                label="คำอธิบาย"
+                name="description"
+                onChange={formik.handleChange}
+                value={formik.values.description}
+              />
               <TextField
                 label="ราคา"
                 name="price"
                 onChange={formik.handleChange}
+                value={formik.values.price}
                 required
                 type="number"
                 InputProps={{ inputProps: { min: 0 } }}
               />
             </Stack>
           </Stack>
-          <Button label="เพิ่มเมนูอาหาร" type="submit" />
+          <Button label="แก้ไขเมนูอาหาร" type="submit" />
           <Button label="ยกเลิก" myVariant="secondary" onClick={onClose} />
+          <Button label="ลบเมนูอาหาร" myVariant="danger" onClick={onDelete} />
         </ModalStack>
       </form>
     </Modal>

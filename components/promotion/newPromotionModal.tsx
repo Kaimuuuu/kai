@@ -15,6 +15,7 @@ import { getEditMenu } from "@/services/menuService";
 import { toNanoSecond } from "@/util/duration";
 import {
   LOCAL_STORAGE_EMPLOYEE_TOKEN,
+  LOCAL_STORAGE_ROLE,
   SELECT_LABEL_PROMOTION_MENU_ITEM_ALACARTE,
   SELECT_LABEL_PROMOTION_MENU_ITEM_BUFFET,
   SELECT_LABEL_PROMOTION_MENU_ITEM_DEFAULT,
@@ -43,13 +44,14 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
       ),
   );
   const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const [role, setRole] = useLocalStorage(LOCAL_STORAGE_ROLE, "-1");
   const [noLimitTime, setNoLimitTime] = useState<boolean>(false);
   const [imageFile, setImageFile, previewUrl] = usePreviewImage();
 
   const MAX_DURATION = toNanoSecond(99, 59);
 
   useEffect(() => {
-    getEditMenu(token)
+    getEditMenu(token, Number(role))
       .then((menus) => {
         const menuItems = menus.flatMap((menu) => menu.items);
         setPromotionMenuItems(
@@ -90,8 +92,6 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
       if (imageFile) {
         imagePath = await uploadImage(token, imageFile);
       }
-
-      console.log(values)
 
       const req: CreatePromotionRequest = {
         name: values.name,

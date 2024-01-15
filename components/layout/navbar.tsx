@@ -26,7 +26,7 @@ export default function Navbar() {
           onClick={() => router.push(navbatItem.path)}
         />
       ))}
-      <Button label={"ออกจากระบบ"} myVariant="error" onClick={() => router.push("/login")} />
+      <Button label={"ออกจากระบบ"} myVariant="danger" onClick={() => router.push("/login")} />
     </Stack>
   );
 }

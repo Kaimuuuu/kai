@@ -1,4 +1,4 @@
-import { CreateMenuRequest, Menu, MenuItem } from "@/types";
+import { CreateMenuRequest, EmployeeRole, Menu, MenuItem, UpdateMenuRequest } from "@/types";
 
 export async function getMenu(token: string): Promise<Menu[]> {
   const res = await fetch(`${process.env.BACKEND_URL}/menu`, {
@@ -12,14 +12,20 @@ export async function getMenu(token: string): Promise<Menu[]> {
   return menuItemsToMenuList(menuItems);
 }
 
-export async function getEditMenu(token: string): Promise<Menu[]> {
+export async function getEditMenu(token: string, role: EmployeeRole): Promise<Menu[]> {
   const res = await fetch(`${process.env.BACKEND_URL}/menu/edit`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  const menuItems: MenuItem[] = await res.json();
+  let menuItems: MenuItem[] = await res.json();
+  if (role === EmployeeRole.Admin) {
+    menuItems = menuItems.map((menuItem) => ({
+      ...menuItem,
+      editable: true,
+    }));
+  }
 
   return menuItemsToMenuList(menuItems);
 }
@@ -66,6 +72,38 @@ export async function createMenu(token: string, req: CreateMenuRequest): Promise
       "Content-Type": "Application/json",
     },
     body: JSON.stringify(req),
+  });
+
+  if (res.status !== 200) {
+    throw new Error();
+  }
+}
+
+export async function updateMenu(
+  token: string,
+  req: UpdateMenuRequest,
+  menuId: string,
+): Promise<void> {
+  const res = await fetch(`${process.env.BACKEND_URL}/menu/${menuId}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "Application/json",
+    },
+    body: JSON.stringify(req),
+  });
+
+  if (res.status !== 200) {
+    throw new Error();
+  }
+}
+
+export async function deleteMenu(token: string, menuId: string): Promise<void> {
+  const res = await fetch(`${process.env.BACKEND_URL}/menu/${menuId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   if (res.status !== 200) {

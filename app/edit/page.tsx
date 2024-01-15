@@ -10,7 +10,7 @@ import { Box, Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useSearch from "@/hooks/useSearch";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
+import { LOCAL_STORAGE_EMPLOYEE_TOKEN, LOCAL_STORAGE_ROLE } from "@/constants";
 import Button from "@/components/button";
 import NewMenuModal from "@/components/menu/newMenuModal";
 
@@ -23,18 +23,22 @@ export default function EditMenu() {
     })),
   );
   const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const [role, setRole] = useLocalStorage(LOCAL_STORAGE_ROLE, "-1");
   const [newMenuModal, setNewMenuModal] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
-    getEditMenu(token)
+    getEditMenu(token, Number(role))
       .then((menus) => {
         setMenus(menus);
       })
       .catch((err) => console.log(err));
-  }, [token]);
+  }, [token, refresh]);
 
   const onOpenNewMenuModal = () => setNewMenuModal(true);
   const onCloseNewMenuModal = () => setNewMenuModal(false);
+
+  const refreshing = () => setRefresh(!refresh);
 
   return (
     <main
@@ -48,8 +52,8 @@ export default function EditMenu() {
       <Container>
         <Navbar />
         <Stack alignItems={"center"} spacing={"10px"}>
-          <Stack direction={'row'} width={'100%'} spacing={'10px'}>
-            <Box width={'30%'}>
+          <Stack direction={"row"} width={"100%"} spacing={"10px"}>
+            <Box width={"30%"}>
               <Button label="เพิ่มเมนู" onClick={onOpenNewMenuModal} />
             </Box>
             <TextField label="ค้นหาเมนูตามชื่อ" onChange={(e) => setSearchQuery(e.target.value)} />
@@ -59,7 +63,11 @@ export default function EditMenu() {
               <Stack spacing={1} key={menu.catagory}>
                 <Heading>{menu.catagory}</Heading>
                 {menu.items.map((menuItem) => (
-                  <EditMenuCard key={menuItem.id} menuItem={menuItem} />
+                  <EditMenuCard
+                    key={menuItem.id}
+                    menuItem={menuItem}
+                    refreshEditMenus={refreshing}
+                  />
                 ))}
               </Stack>
             ))}
@@ -69,6 +77,7 @@ export default function EditMenu() {
           state={newMenuModal}
           onClose={onCloseNewMenuModal}
           onOpen={onOpenNewMenuModal}
+          refreshEditMenus={refreshing}
         />
       </Container>
     </main>

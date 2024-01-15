@@ -10,14 +10,21 @@ import { toggleOutOfStock } from "@/services/menuService";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
 import MyImage from "../image";
+import Button from "../button";
+import EditMenuModal from "./editMenuModal";
 
 interface Props {
   menuItem: MenuItem;
+  refreshEditMenus: () => void;
 }
 
-export default function EditMenuCard({ menuItem }: Props) {
+export default function EditMenuCard({ menuItem, refreshEditMenus }: Props) {
   const [isOutOfStock, setIsOutOfStock] = useState<boolean>(menuItem.outOfStock);
   const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const [editMenuModal, setEditMenuModal] = useState<boolean>(false);
+
+  const onOpenEditMenuModal = () => setEditMenuModal(true);
+  const onCloseEditMenuModal = () => setEditMenuModal(false);
 
   const onSwitchOutOfStock = () => {
     Swal.fire({
@@ -69,6 +76,16 @@ export default function EditMenuCard({ menuItem }: Props) {
             </Stack>
           </Stack>
         </Stack>
+        {menuItem.editable && <Button label="แก้ไข" onClick={onOpenEditMenuModal} />}
+        {menuItem.editable && (
+          <EditMenuModal
+            menuItem={menuItem}
+            onOpen={onOpenEditMenuModal}
+            onClose={onCloseEditMenuModal}
+            state={editMenuModal}
+            refreshEditMenus={refreshEditMenus}
+          />
+        )}
       </Stack>
     </Card>
   );

@@ -64,7 +64,7 @@ export default function QrCodeCard({ qrCode }: Props) {
                 borderRadius: "16px",
                 overflow: "hidden",
                 height: "fit-content",
-                margin: "auto", 
+                margin: "auto",
               }}
             >
               <MyImage imagePath={`qrcode/${qrCode.token}`} width={300} height={300} />

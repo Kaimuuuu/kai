@@ -33,7 +33,7 @@ export default function OrderCard({ order }: Props) {
         </Stack>
         <Body bold>{`โต๊ะที่: ${order.tableNumber}`}</Body>
         <Button label="สำเร็จ" />
-        <Button label="ยกเลิก" myVariant="error" />
+        <Button label="ยกเลิกคำสั่งอาหาร" myVariant="danger" />
       </Stack>
     </MuiCard>
   );
