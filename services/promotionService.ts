@@ -5,19 +5,23 @@ import {
   Promotion,
   PromotionMenuItem,
   PromotionMenuItemType,
+  UpdatePromotionRequest,
 } from "@/types";
-import { getAllMenu, getEditMenu } from "./menuService";
+import { getAllMenu } from "./menuService";
 
-export async function getPromotion(token: string) {
+export async function getPromotions(token: string, role: EmployeeRole) {
   const res = await fetch(`${process.env.BACKEND_URL}/promotion`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  const promotions: Promotion[] = await res.json();
+  const promotions: Promotion[] = (await res.json()) ?? [];
 
-  return promotions ?? [];
+  return promotions.map((promotion) => ({
+    ...promotion,
+    editable: role === EmployeeRole.Admin ? true : false,
+  }));
 }
 
 export async function generateQrCode(
@@ -98,7 +102,37 @@ export async function createPromotion(token: string, req: CreatePromotionRequest
     body: JSON.stringify(req),
   });
 
-  console.log(res.body);
+  if (res.status !== 200) {
+    throw new Error();
+  }
+}
+
+export async function updatePromotion(
+  token: string,
+  req: UpdatePromotionRequest,
+  promotionId: string,
+): Promise<void> {
+  const res = await fetch(`${process.env.BACKEND_URL}/promotion/${promotionId}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(req),
+  });
+
+  if (res.status !== 200) {
+    throw new Error();
+  }
+}
+
+export async function deletePromotion(token: string, promotionId: string): Promise<void> {
+  const res = await fetch(`${process.env.BACKEND_URL}/promotion/${promotionId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   if (res.status !== 200) {
     throw new Error();

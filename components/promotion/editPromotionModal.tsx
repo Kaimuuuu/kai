@@ -4,17 +4,25 @@ import TextField from "../textField";
 import Title from "../typo/title";
 import IOSSwitch from "../switch";
 import Button from "../button";
-import { CreatePromotionRequest, PromotionMenuItem, PromotionMenuItemType } from "@/types";
+import {
+  Promotion,
+  PromotionMenuItem,
+  PromotionMenuItemType,
+  UpdatePromotionRequest,
+} from "@/types";
 import { ChangeEvent, useEffect, useState } from "react";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import TextArea from "../textArea";
-import { createPromotion, getAllPromotionMenuItems } from "@/services/promotionService";
+import {
+  deletePromotion,
+  getPromotionMenuItems,
+  updatePromotion,
+} from "@/services/promotionService";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
-import { toNanoSecond } from "@/util/duration";
+import { nanoSecondToHourMinute, toNanoSecond } from "@/util/duration";
 import {
   LOCAL_STORAGE_EMPLOYEE_TOKEN,
-  LOCAL_STORAGE_ROLE,
   SELECT_LABEL_PROMOTION_MENU_ITEM_ALACARTE,
   SELECT_LABEL_PROMOTION_MENU_ITEM_BUFFET,
   SELECT_LABEL_PROMOTION_MENU_ITEM_DEFAULT,
@@ -27,13 +35,20 @@ import MyImage from "../image";
 import Body from "../typo/body";
 
 interface Props {
+  promotion: Promotion;
   state: boolean;
   onOpen: () => void;
   onClose: () => void;
   refreshPromotions: () => void;
 }
 
-export default function NewPromotionModal({ state, onOpen, onClose, refreshPromotions }: Props) {
+export default function EditPromotionModal({
+  promotion,
+  state,
+  onOpen,
+  onClose,
+  refreshPromotions,
+}: Props) {
   const [selectedFilterer, setSelectedFilterer] = useState<-1 | PromotionMenuItemType>(-1);
   const [promotionMenuItems, setPromotionMenuItems] = useState<PromotionMenuItem[]>([]);
   const [filterdPromotionMenuItems, setSearchQuery] = useSearch(
@@ -51,7 +66,7 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
   const MAX_MINUTES = 59;
 
   useEffect(() => {
-    getAllPromotionMenuItems(token)
+    getPromotionMenuItems(token, promotion.id)
       .then((promotionMenuItems) => {
         setPromotionMenuItems(promotionMenuItems);
       })
@@ -72,24 +87,26 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
     }
   };
 
+  const HoursMinutes = nanoSecondToHourMinute(promotion.duration);
+
   const formik = useFormik({
     initialValues: {
-      name: "",
-      weight: "",
-      price: "",
-      hours: "",
-      minutes: "",
-      description: "",
+      name: promotion.name,
+      weight: promotion.weight,
+      price: promotion.price,
+      hours: HoursMinutes.hours,
+      minutes: HoursMinutes.minutes,
+      description: promotion.description,
     },
     onSubmit: async (values) => {
-      let imagePath = "";
+      let imagePath = promotion.imagePath;
       if (imageFile) {
         imagePath = await uploadImage(token, imageFile);
       }
 
-      const req: CreatePromotionRequest = {
+      const req: UpdatePromotionRequest = {
         name: values.name,
-        weight: Number(values.weight),
+        weight: values.weight,
         price: Number(values.price),
         imagePath: imagePath,
         duration: Number(
@@ -105,12 +122,12 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
             menuItemId: promotionMenuItem.menuItem.id,
           })),
       };
-      createPromotion(token, req)
+      updatePromotion(token, req, promotion.id)
         .then(() => {
           onClose();
           refreshPromotions();
           Swal.fire({
-            title: "สร้างโปรโมชั่นสำเร็จ",
+            title: "แก้ไขโปรโมชั่นสำเร็จ",
             icon: "success",
             confirmButtonText: "ตกลง",
           });
@@ -118,6 +135,36 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
         .catch((err) => console.log(err));
     },
   });
+
+  const onDelete = () => {
+    onClose();
+    Swal.fire({
+      title: `ต้องการที่จะลบโปรโมชั่น "${promotion.name}"?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "ตกลง",
+      cancelButtonText: "ยกเลิก",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deletePromotion(token, promotion.id)
+          .then(() => {
+            refreshPromotions();
+            Swal.fire({
+              title: "ลบโปรโมชั่นสำเร็จ",
+              icon: "success",
+              confirmButtonText: "ตกลง",
+            });
+          })
+          .catch((err) => {
+            Swal.fire({
+              title: "ลบโปรโมชั่นไม่สำเร็จ",
+              icon: "error",
+              confirmButtonText: "ตกลง",
+            });
+          });
+      }
+    });
+  };
 
   return (
     <Modal open={state} onClose={onClose}>
@@ -136,7 +183,10 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
                 }}
                 onClick={onBrowseImage}
               >
-                <MyImage imagePath={previewUrl} frontend />
+                <MyImage
+                  imagePath={!imageFile ? promotion.imagePath : previewUrl}
+                  frontend={imageFile !== undefined}
+                />
               </div>
               <Body>**คลิกที่รูปเพื่อเลือกรูปภาพ**</Body>
             </div>
@@ -145,6 +195,7 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
                 label="ชื่อโปรโมชั่น"
                 name="name"
                 onChange={formik.handleChange}
+                value={formik.values.name}
                 required
               />
               <Stack direction={"row"} spacing={"10px"}>
@@ -152,6 +203,7 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
                   label="น้ำหนักสุทธิ"
                   name="weight"
                   onChange={formik.handleChange}
+                  value={formik.values.weight}
                   type="number"
                   InputProps={{ inputProps: { min: 0 } }}
                   required
@@ -160,6 +212,7 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
                   label="ราคาเริ่มต้น"
                   name="price"
                   onChange={formik.handleChange}
+                  value={formik.values.price}
                   type="number"
                   InputProps={{ inputProps: { min: 0 } }}
                   required
@@ -191,7 +244,12 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
               </Stack>
             </Stack>
           </Stack>
-          <TextArea label="คำอธิบาย" name="description" onChange={formik.handleChange} />
+          <TextArea
+            label="คำอธิบาย"
+            name="description"
+            onChange={formik.handleChange}
+            value={formik.values.description}
+          />
           <Stack direction={"row"} spacing={"10px"}>
             <Stack direction={"row"} alignItems={"center"} spacing={"4px"}>
               <Title>แสดงเฉพาะ: </Title>
@@ -285,8 +343,9 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
               </Stack>
             ))}
           </Stack>
-          <Button label="สร้างโปรโมชั่น" myVariant="primary" type="submit" />
+          <Button label="แก้ไขโปรโมชั่น" myVariant="primary" type="submit" />
           <Button label="ปิด" myVariant="secondary" onClick={onClose} />
+          <Button label="ลบโปรโมชั่น" myVariant="danger" onClick={onDelete} />
         </ModalStack>
       </form>
     </Modal>

@@ -114,6 +114,16 @@ export interface CreatePromotionRequest {
   promotionMenuItems: { type: PromotionMenuItemType; menuItemId: string }[];
 }
 
+export interface UpdatePromotionRequest {
+  name: string;
+  weight: number;
+  price: number;
+  imagePath: string;
+  duration: number;
+  description: string;
+  promotionMenuItems: { type: PromotionMenuItemType; menuItemId: string }[];
+}
+
 export interface CreateMenuRequest {
   name: string;
   catagory: string;
