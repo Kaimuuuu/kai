@@ -2,12 +2,12 @@ import { Box, Stack, Card as MuiCard } from "@mui/material";
 import Heading from "../typo/heading";
 import Button from "../button";
 import Card from "../card";
-import { Order, OrderStatus } from "@/types";
+import { EmployeeRole, Order, OrderStatus } from "@/types";
 import Title from "../typo/title";
 import Body from "../typo/body";
 import { updateOrderStatus } from "@/services/orderService";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
+import { LOCAL_STORAGE_EMPLOYEE_TOKEN, LOCAL_STORAGE_ROLE } from "@/constants";
 import Swal from "sweetalert2";
 
 interface Props {
@@ -17,10 +17,11 @@ interface Props {
 
 export default function OrderCard({ order, refreshOrders }: Props) {
   const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const [role, setRole] = useLocalStorage(LOCAL_STORAGE_ROLE, "");
 
   const onUpdate = (status: OrderStatus) => {
     Swal.fire({
-      title: `ต้องการที่จะอัพเดจสถานะคำสั่งอาหาร "${order.id}"?`,
+      title: `ต้องการที่จะอัพเดจสถานะคำสั่งอาหาร "${order.id}" เป็น "${status === OrderStatus.Success ? "สำเร็จ" : "ยกเลิก"}"?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "ตกลง",
@@ -68,12 +69,17 @@ export default function OrderCard({ order, refreshOrders }: Props) {
           ))}
         </Stack>
         <Body bold>{`โต๊ะที่: ${order.tableNumber}`}</Body>
-        <Button label="สำเร็จ" onClick={() => onUpdate(OrderStatus.Success)} />
-        <Button
-          label="ยกเลิกคำสั่งอาหาร"
-          myVariant="danger"
-          onClick={() => onUpdate(OrderStatus.Decline)}
-        />
+        {
+          (Number(role) === EmployeeRole.Chef || Number(role) === EmployeeRole.Admin) &&
+          <>
+            <Button label="สำเร็จ" onClick={() => onUpdate(OrderStatus.Success)} />
+            <Button
+              label="ยกเลิกคำสั่งอาหาร"
+              myVariant="danger"
+              onClick={() => onUpdate(OrderStatus.Decline)}
+            />
+          </>
+        }
       </Stack>
     </MuiCard>
   );

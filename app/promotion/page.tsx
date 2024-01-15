@@ -5,7 +5,7 @@ import Navbar from "@/components/layout/navbar";
 import PromotionCard from "@/components/promotion/promotionCard";
 import Heading from "@/components/typo/heading";
 import { getPromotions } from "@/services/promotionService";
-import { Promotion as PromotionType } from "@/types";
+import { EmployeeRole, Promotion as PromotionType } from "@/types";
 import { Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import useLocalStorage from "@/hooks/useLocalStorage";
@@ -43,7 +43,10 @@ export default function Promotion() {
         <Navbar />
         <Stack alignItems={"center"} spacing={"10px"}>
           <Heading>โปรโมชั่น</Heading>
-          <Button label="สร้าง Promotion" onClick={onOpenNewPromotionModal} />
+          {
+            Number(role) === EmployeeRole.Admin &&
+              <Button label="สร้าง Promotion" onClick={onOpenNewPromotionModal} />
+          }
           {promotions.map((promotion) => (
             <PromotionCard
               promotion={promotion}
@@ -52,12 +55,15 @@ export default function Promotion() {
             />
           ))}
         </Stack>
-        <NewPromotionModal
-          onOpen={onOpenNewPromotionModal}
-          onClose={onCloseNewPromotionModal}
-          state={newPromotionModal}
-          refreshPromotions={refreshing}
-        />
+        {
+          Number(role) === EmployeeRole.Admin &&
+            <NewPromotionModal
+              onOpen={onOpenNewPromotionModal}
+              onClose={onCloseNewPromotionModal}
+              state={newPromotionModal}
+              refreshPromotions={refreshing}
+            />
+        }
       </Container>
     </main>
   );

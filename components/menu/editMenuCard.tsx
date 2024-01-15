@@ -2,13 +2,13 @@ import { Stack } from "@mui/material";
 import Card from "@mui/material/Card";
 import SubHeading from "../typo/subHeading";
 import Body from "../typo/body";
-import { MenuItem } from "@/types";
+import { EmployeeRole, MenuItem } from "@/types";
 import IOSSwitch from "../switch";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import { toggleOutOfStock } from "@/services/menuService";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
+import { LOCAL_STORAGE_EMPLOYEE_TOKEN, LOCAL_STORAGE_ROLE } from "@/constants";
 import MyImage from "../image";
 import Button from "../button";
 import EditMenuModal from "./editMenuModal";
@@ -21,6 +21,7 @@ interface Props {
 export default function EditMenuCard({ menuItem, refreshEditMenus }: Props) {
   const [isOutOfStock, setIsOutOfStock] = useState<boolean>(menuItem.outOfStock);
   const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const [role, setRole] = useLocalStorage(LOCAL_STORAGE_ROLE, "");
   const [editMenuModal, setEditMenuModal] = useState<boolean>(false);
 
   const onOpenEditMenuModal = () => setEditMenuModal(true);
@@ -37,6 +38,7 @@ export default function EditMenuCard({ menuItem, refreshEditMenus }: Props) {
       if (result.isConfirmed) {
         toggleOutOfStock(token, menuItem.id, !isOutOfStock)
           .then(() => {
+            setIsOutOfStock(!isOutOfStock);
             Swal.fire({
               title: `เปลี่ยนสถาณะเมนู "${menuItem.name}" เป็น ${isOutOfStock ? `"ไม่หมด"` : `"หมด"`} สำเร็จ`,
               icon: "success",
@@ -50,7 +52,6 @@ export default function EditMenuCard({ menuItem, refreshEditMenus }: Props) {
               confirmButtonText: "ตกลง",
             });
           });
-        setIsOutOfStock(!isOutOfStock);
       }
     });
   };
@@ -78,15 +79,18 @@ export default function EditMenuCard({ menuItem, refreshEditMenus }: Props) {
             <Body>{menuItem.description}</Body>
             <Stack direction={"row"} alignItems={"center"} sx={{ marginTop: "auto" }}>
               <Body bold>{`ราคา: ${menuItem.price}฿`}</Body>
-              <Stack
-                alignItems={"center"}
-                direction={"row"}
-                sx={{ marginLeft: "auto" }}
-                spacing={0.2}
-              >
-                <Body bold>{`หมด: `}</Body>
-                <IOSSwitch checked={isOutOfStock} onClick={onSwitchOutOfStock} />
-              </Stack>
+              {
+                (Number(role) === EmployeeRole.Admin || Number(role) === EmployeeRole.Chef) &&
+                  <Stack
+                    alignItems={"center"}
+                    direction={"row"}
+                    sx={{ marginLeft: "auto" }}
+                    spacing={0.2}
+                  >
+                    <Body bold>{`หมด: `}</Body>
+                    <IOSSwitch checked={isOutOfStock} onClick={onSwitchOutOfStock} />
+                  </Stack>
+              }
             </Stack>
           </Stack>
         </Stack>

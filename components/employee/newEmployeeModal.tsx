@@ -52,6 +52,7 @@ export default function NewEmployeeModal({ state, onClose, onOpen, refreshEmploy
       email: "",
     },
     onSubmit: async (values) => {
+      onClose();
       let imagePath = "";
       if (imageFile) {
         imagePath = await uploadImage(token, imageFile);
@@ -66,7 +67,6 @@ export default function NewEmployeeModal({ state, onClose, onOpen, refreshEmploy
       };
       createEmployee(token, req)
         .then((generatedPassword: string) => {
-          onClose();
           refreshEmployees();
           Swal.fire({
             title: "เพิ่มพนักงานสำเร็จ",
