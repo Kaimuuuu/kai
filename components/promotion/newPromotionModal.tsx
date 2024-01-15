@@ -8,10 +8,9 @@ import { CreatePromotionRequest, PromotionMenuItem, PromotionMenuItemType } from
 import { ChangeEvent, useEffect, useState } from "react";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import TextArea from "../textArea";
-import { createPromotion } from "@/services/promotionService";
+import { createPromotion, getAllPromotionMenuItems } from "@/services/promotionService";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
-import { getEditMenu } from "@/services/menuService";
 import { toNanoSecond } from "@/util/duration";
 import {
   LOCAL_STORAGE_EMPLOYEE_TOKEN,
@@ -44,22 +43,16 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
       ),
   );
   const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
-  const [role, setRole] = useLocalStorage(LOCAL_STORAGE_ROLE, "-1");
   const [noLimitTime, setNoLimitTime] = useState<boolean>(false);
   const [imageFile, setImageFile, previewUrl] = usePreviewImage();
 
-  const MAX_DURATION = toNanoSecond(99, 59);
+  const MAX_HOURS = 99;
+  const MAX_MINUTES = 59;
 
   useEffect(() => {
-    getEditMenu(token, Number(role))
-      .then((menus) => {
-        const menuItems = menus.flatMap((menu) => menu.items);
-        setPromotionMenuItems(
-          menuItems.map((menuItem) => ({
-            type: PromotionMenuItemType.None,
-            menuItem: menuItem,
-          })),
-        );
+    getAllPromotionMenuItems(token)
+      .then((promotionMenuItems) => {
+        setPromotionMenuItems(promotionMenuItems);
       })
       .catch((err) => console.log(err));
   }, [token]);
@@ -99,13 +92,17 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
         price: Number(values.price),
         imagePath: imagePath,
         duration: Number(
-          noLimitTime ? MAX_DURATION : toNanoSecond(Number(values.hours), Number(values.minutes)),
+          noLimitTime
+            ? toNanoSecond(MAX_HOURS, MAX_MINUTES)
+            : toNanoSecond(Number(values.hours), Number(values.minutes)),
         ),
         description: values.description,
-        promotionMenuItems: promotionMenuItems.map((promotionMenuItem) => ({
-          type: promotionMenuItem.type,
-          menuItemId: promotionMenuItem.menuItem.id,
-        })),
+        promotionMenuItems: promotionMenuItems
+          .filter((promotionMenuItem) => promotionMenuItem.type !== PromotionMenuItemType.None)
+          .map((promotionMenuItem) => ({
+            type: promotionMenuItem.type,
+            menuItemId: promotionMenuItem.menuItem.id,
+          })),
       };
       createPromotion(token, req)
         .then(() => {
@@ -176,8 +173,8 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
                   name="hours"
                   onChange={formik.handleChange}
                   type="number"
-                  InputProps={{ inputProps: { min: 0, max: 99 } }}
-                  value={noLimitTime ? 99 : formik.values.hours}
+                  InputProps={{ inputProps: { min: 0, max: MAX_HOURS } }}
+                  value={noLimitTime ? MAX_HOURS : formik.values.hours}
                   required
                 />
                 <TextField
@@ -185,8 +182,8 @@ export default function NewPromotionModal({ state, onOpen, onClose }: Props) {
                   name="minutes"
                   onChange={formik.handleChange}
                   type="number"
-                  InputProps={{ inputProps: { min: 0, max: 59 } }}
-                  value={noLimitTime ? 59 : formik.values.minutes}
+                  InputProps={{ inputProps: { min: 0, max: MAX_MINUTES } }}
+                  value={noLimitTime ? MAX_MINUTES : formik.values.minutes}
                   required
                 />
               </Stack>

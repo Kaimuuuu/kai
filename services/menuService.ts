@@ -30,6 +30,18 @@ export async function getEditMenu(token: string, role: EmployeeRole): Promise<Me
   return menuItemsToMenuList(menuItems);
 }
 
+export async function getAllMenu(token: string): Promise<Menu[]> {
+  const res = await fetch(`${process.env.BACKEND_URL}/menu/edit`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  let menuItems: MenuItem[] = await res.json();
+
+  return menuItemsToMenuList(menuItems);
+}
+
 export async function toggleOutOfStock(
   token: string,
   menuId: string,

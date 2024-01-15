@@ -1,10 +1,12 @@
 import {
   CreatePromotionRequest,
+  EmployeeRole,
   MenuItem,
   Promotion,
   PromotionMenuItem,
   PromotionMenuItemType,
 } from "@/types";
+import { getAllMenu, getEditMenu } from "./menuService";
 
 export async function getPromotion(token: string) {
   const res = await fetch(`${process.env.BACKEND_URL}/promotion`, {
@@ -15,7 +17,7 @@ export async function getPromotion(token: string) {
   });
   const promotions: Promotion[] = await res.json();
 
-  return promotions;
+  return promotions ?? [];
 }
 
 export async function generateQrCode(
@@ -46,6 +48,16 @@ export async function generateQrCode(
   return data.clientToken;
 }
 
+export async function getAllPromotionMenuItems(token: string): Promise<PromotionMenuItem[]> {
+  const menus = await getAllMenu(token);
+  const menuItems = menus.flatMap((menu) => menu.items);
+
+  return menuItems.map((menuItem) => ({
+    type: PromotionMenuItemType.None,
+    menuItem: menuItem,
+  }));
+}
+
 export async function getPromotionMenuItems(
   token: string,
   promotionId: string,
@@ -58,7 +70,22 @@ export async function getPromotionMenuItems(
   });
   const promotionMenuItems: PromotionMenuItem[] = await res.json();
 
-  return promotionMenuItems;
+  const allPromotionMenuItems: PromotionMenuItem[] = await getAllPromotionMenuItems(token);
+
+  return allPromotionMenuItems.map((promotionMenuItem) => {
+    const target = promotionMenuItems.find(
+      (target) => target.menuItem.id === promotionMenuItem.menuItem.id,
+    );
+    let type = promotionMenuItem.type;
+    if (target) {
+      type = target.type;
+    }
+
+    return {
+      menuItem: promotionMenuItem.menuItem,
+      type: type,
+    };
+  });
 }
 
 export async function createPromotion(token: string, req: CreatePromotionRequest): Promise<void> {
