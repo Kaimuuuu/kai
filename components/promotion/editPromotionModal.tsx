@@ -99,6 +99,7 @@ export default function EditPromotionModal({
       description: promotion.description,
     },
     onSubmit: async (values) => {
+      onClose();
       let imagePath = promotion.imagePath;
       if (imageFile) {
         imagePath = await uploadImage(token, imageFile);
@@ -124,7 +125,6 @@ export default function EditPromotionModal({
       };
       updatePromotion(token, req, promotion.id)
         .then(() => {
-          onClose();
           refreshPromotions();
           Swal.fire({
             title: "แก้ไขโปรโมชั่นสำเร็จ",
@@ -132,7 +132,13 @@ export default function EditPromotionModal({
             confirmButtonText: "ตกลง",
           });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          Swal.fire({
+            title: "แก้ไขโมชั่นไม่สำเร็จ",
+            icon: "error",
+            confirmButtonText: "ตกลง",
+          });
+        });
     },
   });
 

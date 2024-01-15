@@ -26,9 +26,9 @@ export default function GenerateQrCodeModal({ promotion, state, onOpen, onClose 
       size: "",
     },
     onSubmit: async (values) => {
+      onClose();
       generateQrCode(token, promotion.id, values.tableNumber, values.size)
         .then((token) => {
-          onClose();
           Swal.fire({
             imageUrl: `${process.env.BACKEND_URL}/qrcode/${token}`,
             imageWidth: 300,
@@ -36,7 +36,13 @@ export default function GenerateQrCodeModal({ promotion, state, onOpen, onClose 
             confirmButtonText: "ตกลง",
           });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          Swal.fire({
+            title: "สร้าง QR Code ไม่สำเร็จ",
+            icon: "error",
+            confirmButtonText: "ตกลง",
+          });
+        });
     },
   });
 
