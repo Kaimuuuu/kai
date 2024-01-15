@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 export default function Order() {
   const [orders, setOrders] = useState<OrderType[]>([]);
   const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
     getOrder(token)
@@ -20,7 +21,9 @@ export default function Order() {
         setOrders(orders);
       })
       .catch((err) => console.log(err));
-  }, [token]);
+  }, [token, refresh]);
+
+  const refreshing = () => setRefresh(!refresh);
 
   return (
     <main
@@ -36,7 +39,7 @@ export default function Order() {
         <Stack alignItems={"center"} spacing={"10px"}>
           <Heading>รายการสั่งอาหาร</Heading>
           {orders.map((order) => (
-            <OrderCard order={order} key={order.id} />
+            <OrderCard order={order} key={order.id} refreshOrders={refreshing} />
           ))}
         </Stack>
       </Container>

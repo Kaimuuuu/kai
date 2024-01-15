@@ -1,4 +1,4 @@
-import { CartItem, Order, SummaryOrderHistory } from "@/types";
+import { CartItem, Order, OrderStatus, SummaryOrderHistory } from "@/types";
 
 export async function getOrder(token: string): Promise<Order[]> {
   const res = await fetch(`${process.env.BACKEND_URL}/order/pending`, {
@@ -8,9 +8,7 @@ export async function getOrder(token: string): Promise<Order[]> {
     },
   });
 
-  const data: Order[] = await res.json();
-
-  console.log(data);
+  const data: Order[] = await res.json() ?? [];
 
   return data;
 }
@@ -24,7 +22,7 @@ export async function createOrder(token: string, cart: CartItem[]) {
     },
     body: JSON.stringify({
       orderItems: cart.map((cartItem) => ({
-        menuId: cartItem.menuItemId,
+        menuItemId: cartItem.menuItemId,
         quantity: cartItem.quantity,
       })),
     }),
@@ -50,8 +48,8 @@ export async function getSummaryOrderHistory(token: string): Promise<SummaryOrde
   const data: Order[] = await res.json();
 
   let total = 0;
-  data.forEach((order) => {
-    const order_price = order.orderItems.reduce(
+  data.filter(order => order.status !== OrderStatus.Decline).forEach((order) => {
+    const order_price = order.orderItems.filter(orderItem => !orderItem.outOfStock).reduce(
       (accu, item) => accu + item.price * item.quantity,
       0,
     );
@@ -62,4 +60,21 @@ export async function getSummaryOrderHistory(token: string): Promise<SummaryOrde
     totalPrice: total,
     orderHistory: data ?? [],
   };
+}
+
+export async function updateOrderStatus(token: string, status: OrderStatus, orderId: string): Promise<void> {
+  const res = await fetch(`${process.env.BACKEND_URL}/order/status/${orderId}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      status: status
+    }),
+  });
+
+  if (res.status !== 200) {
+    throw new Error();
+  }
 }
