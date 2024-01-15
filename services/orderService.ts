@@ -8,7 +8,7 @@ export async function getOrder(token: string): Promise<Order[]> {
     },
   });
 
-  const data: Order[] = await res.json() ?? [];
+  const data: Order[] = (await res.json()) ?? [];
 
   return data;
 }
@@ -48,13 +48,14 @@ export async function getSummaryOrderHistory(token: string): Promise<SummaryOrde
   const data: Order[] = await res.json();
 
   let total = 0;
-  data.filter(order => order.status !== OrderStatus.Decline).forEach((order) => {
-    const order_price = order.orderItems.filter(orderItem => !orderItem.outOfStock).reduce(
-      (accu, item) => accu + item.price * item.quantity,
-      0,
-    );
-    total += order_price;
-  });
+  data
+    .filter((order) => order.status !== OrderStatus.Decline)
+    .forEach((order) => {
+      const order_price = order.orderItems
+        .filter((orderItem) => !orderItem.outOfStock)
+        .reduce((accu, item) => accu + item.price * item.quantity, 0);
+      total += order_price;
+    });
 
   return {
     totalPrice: total,
@@ -62,7 +63,11 @@ export async function getSummaryOrderHistory(token: string): Promise<SummaryOrde
   };
 }
 
-export async function updateOrderStatus(token: string, status: OrderStatus, orderId: string): Promise<void> {
+export async function updateOrderStatus(
+  token: string,
+  status: OrderStatus,
+  orderId: string,
+): Promise<void> {
   const res = await fetch(`${process.env.BACKEND_URL}/order/status/${orderId}`, {
     method: "PUT",
     headers: {
@@ -70,7 +75,7 @@ export async function updateOrderStatus(token: string, status: OrderStatus, orde
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      status: status
+      status: status,
     }),
   });
 

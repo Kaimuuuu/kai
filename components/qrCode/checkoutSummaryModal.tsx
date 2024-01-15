@@ -10,17 +10,25 @@ import Button from "../button";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { useEffect, useState } from "react";
 import { CheckoutSummaryObject } from "@/types";
-import { getCheckoutSummary } from "@/services/qrCodeService";
+import { checkout, getCheckoutSummary } from "@/services/qrCodeService";
 import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
+import Swal from "sweetalert2";
 
 interface Props {
   state: boolean;
   onClose: () => void;
   onOpen: () => void;
   clientToken: string;
+  refreshQrCodes: () => void;
 }
 
-export default function CheckoutSummaryModal({ state, onClose, onOpen, clientToken }: Props) {
+export default function CheckoutSummaryModal({
+  state,
+  onClose,
+  onOpen,
+  clientToken,
+  refreshQrCodes,
+}: Props) {
   const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
   const [checkoutSummary, setCheckoutSummary] = useState<CheckoutSummaryObject>({
     tableNumber: 0,
@@ -37,6 +45,26 @@ export default function CheckoutSummaryModal({ state, onClose, onOpen, clientTok
       .then((summary) => setCheckoutSummary(summary))
       .catch((err) => console.log(err));
   }, [token]);
+
+  const onCheckout = () => {
+    onClose();
+    checkout(clientToken, token)
+      .then(() => {
+        refreshQrCodes();
+        Swal.fire({
+          title: "คิดเงินสำเร็จ",
+          icon: "success",
+          confirmButtonText: "ตกลง",
+        });
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: "คิดเงินล้มเหลว",
+          icon: "error",
+          confirmButtonAriaLabel: "ตกลง",
+        });
+      });
+  };
 
   const hoursMinutes = nanoSecondToHourMinute(checkoutSummary.remainingDuration);
 
@@ -77,7 +105,7 @@ export default function CheckoutSummaryModal({ state, onClose, onOpen, clientTok
               <Card label={`ราคารวม: ${checkoutSummary.totalPrice}฿`} bgcolor="#D12600" />
             </Box>
           </Stack>
-          <Button label="ยืนยัน" />
+          <Button label="ยืนยัน" onClick={onCheckout} />
           <Button label="ปิด" myVariant="secondary" onClick={onClose} />
         </ModalStack>
       </Box>

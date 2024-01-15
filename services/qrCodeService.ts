@@ -24,3 +24,16 @@ export async function getCheckoutSummary(clientToken: string, employeeToken: str
 
   return data;
 }
+
+export async function checkout(clientToken: string, employeeToken: string): Promise<void> {
+  const res = await fetch(`${process.env.BACKEND_URL}/client/checkout/${clientToken}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${employeeToken}`,
+    },
+  });
+
+  if (res.status !== 200) {
+    throw new Error();
+  }
+}

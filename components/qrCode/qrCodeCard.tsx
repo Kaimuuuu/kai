@@ -11,9 +11,10 @@ import MyImage from "../image";
 
 interface Props {
   qrCode: QrCodeType;
+  refreshQrCodes: () => void;
 }
 
-export default function QrCodeCard({ qrCode }: Props) {
+export default function QrCodeCard({ qrCode, refreshQrCodes }: Props) {
   const [viewModal, setViewModal] = useState<boolean>(false);
   const [checkoutSummaryModal, setCheckoutSummaryModal] = useState<boolean>(false);
 
@@ -79,6 +80,7 @@ export default function QrCodeCard({ qrCode }: Props) {
         onOpen={onOpenCheckoutSummaryModal}
         onClose={onCloseCheckoutSummaryModal}
         clientToken={qrCode.token}
+        refreshQrCodes={refreshQrCodes}
       />
     </MuiCard>
   );

@@ -49,7 +49,7 @@ export default function EditMenuCard({ menuItem, refreshEditMenus }: Props) {
               icon: "error",
               confirmButtonText: "ตกลง",
             });
-          })
+          });
         setIsOutOfStock(!isOutOfStock);
       }
     });

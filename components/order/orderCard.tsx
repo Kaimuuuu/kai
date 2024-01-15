@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default function OrderCard({ order, refreshOrders }: Props) {
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "")
+  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
 
   const onUpdate = (status: OrderStatus) => {
     Swal.fire({
@@ -42,10 +42,10 @@ export default function OrderCard({ order, refreshOrders }: Props) {
               icon: "error",
               confirmButtonText: "ตกลง",
             });
-          })
+          });
       }
-    })
-  }
+    });
+  };
 
   return (
     <MuiCard sx={{ borderRadius: "16px", width: "100%" }}>
@@ -69,7 +69,11 @@ export default function OrderCard({ order, refreshOrders }: Props) {
         </Stack>
         <Body bold>{`โต๊ะที่: ${order.tableNumber}`}</Body>
         <Button label="สำเร็จ" onClick={() => onUpdate(OrderStatus.Success)} />
-        <Button label="ยกเลิกคำสั่งอาหาร" myVariant="danger" onClick={() => onUpdate(OrderStatus.Decline)} />
+        <Button
+          label="ยกเลิกคำสั่งอาหาร"
+          myVariant="danger"
+          onClick={() => onUpdate(OrderStatus.Decline)}
+        />
       </Stack>
     </MuiCard>
   );
