@@ -9,7 +9,7 @@ export async function getEmployees(token: string, role: EmployeeRole): Promise<E
   });
   let employees: Employee[] = await res.json();
 
-  return employees.map(employee => ({
+  return employees.map((employee) => ({
     ...employee,
     editable: role === EmployeeRole.Admin ? true : false,
   }));
@@ -29,12 +29,16 @@ export async function createEmployee(token: string, req: CreateEmployeeRequest):
     throw new Error();
   }
 
-  const data: {generatedPassword: string} = await res.json();
+  const data: { generatedPassword: string } = await res.json();
 
   return data.generatedPassword;
 }
 
-export async function updateEmployee(token: string, req: UpdateEmployeeRequest, employeeId: string): Promise<void> {
+export async function updateEmployee(
+  token: string,
+  req: UpdateEmployeeRequest,
+  employeeId: string,
+): Promise<void> {
   const res = await fetch(`${process.env.BACKEND_URL}/employee/${employeeId}`, {
     method: "PUT",
     headers: {

@@ -9,7 +9,12 @@ import Swal from "sweetalert2";
 import { CreateEmployeeRequest, CreateMenuRequest, EmployeeRoleName } from "@/types";
 import { createMenu } from "@/services/menuService";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { EMPLOYEE_ROLE_NAME_ADMIN, EMPLOYEE_ROLE_NAME_CHEF, EMPLOYEE_ROLE_NAME_WAITER, LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
+import {
+  EMPLOYEE_ROLE_NAME_ADMIN,
+  EMPLOYEE_ROLE_NAME_CHEF,
+  EMPLOYEE_ROLE_NAME_WAITER,
+  LOCAL_STORAGE_EMPLOYEE_TOKEN,
+} from "@/constants";
 import { uploadImage } from "@/services/imageService";
 import usePreviewImage from "@/hooks/usePreviewImage";
 import MyImage from "../image";
@@ -102,19 +107,9 @@ export default function NewEmployeeModal({ state, onClose, onOpen, refreshEmploy
               <Body>**คลิกที่รูปเพื่อเลือกรูปภาพ**</Body>
             </div>
             <Stack spacing={"10px"} width={"100%"}>
-              <TextField
-                label="ชื่อพนักงาน"
-                name="name"
-                onChange={formik.handleChange}
-                required
-              />
+              <TextField label="ชื่อพนักงาน" name="name" onChange={formik.handleChange} required />
               <Stack direction={"row"} spacing={"10px"}>
-                <TextField
-                  label="อายุ"
-                  name="age"
-                  onChange={formik.handleChange}
-                  required
-                />
+                <TextField label="อายุ" name="age" onChange={formik.handleChange} required />
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"

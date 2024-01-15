@@ -7,7 +7,12 @@ import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { Employee, EmployeeRoleName, UpdateEmployeeRequest } from "@/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { EMPLOYEE_ROLE_NAME_ADMIN, EMPLOYEE_ROLE_NAME_CHEF, EMPLOYEE_ROLE_NAME_WAITER, LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
+import {
+  EMPLOYEE_ROLE_NAME_ADMIN,
+  EMPLOYEE_ROLE_NAME_CHEF,
+  EMPLOYEE_ROLE_NAME_WAITER,
+  LOCAL_STORAGE_EMPLOYEE_TOKEN,
+} from "@/constants";
 import { uploadImage } from "@/services/imageService";
 import usePreviewImage from "@/hooks/usePreviewImage";
 import MyImage from "../image";
@@ -24,9 +29,17 @@ interface Props {
   refreshEmployees: () => void;
 }
 
-export default function EditEmployeeModal({ employee, state, onClose, onOpen, refreshEmployees }: Props) {
+export default function EditEmployeeModal({
+  employee,
+  state,
+  onClose,
+  onOpen,
+  refreshEmployees,
+}: Props) {
   const [imageFile, setImageFile, previewUrl] = usePreviewImage();
-  const [selectedRole, setSelectedRole] = useState<string>(employeeRoleToEmployeeRoleName(employee.role));
+  const [selectedRole, setSelectedRole] = useState<string>(
+    employeeRoleToEmployeeRoleName(employee.role),
+  );
   const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
 
   const onBrowseImage = () => {
@@ -58,7 +71,7 @@ export default function EditEmployeeModal({ employee, state, onClose, onOpen, re
         email: values.email,
         imagePath: imagePath,
       };
-      console.log(req)
+      console.log(req);
       updateEmployee(token, req, employee.id)
         .then(() => {
           onClose();

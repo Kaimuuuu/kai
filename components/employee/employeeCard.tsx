@@ -49,12 +49,16 @@ export default function EmployeeCard({ employee, refreshEmployees }: Props) {
             <Body>{`เป็นพนักงานเมื่อ: ${employee.createdAt}`}</Body>
           </Stack>
         </Stack>
-        {
-          employee.editable && <Button label="แก้ไข" onClick={onOpenEditEmployeeModal} />
-        }
-        {
-          employee.editable && <EditEmployeeModal state={editEmployeeModal} onClose={onCloseEditEmployeeModal} onOpen={onOpenEditEmployeeModal} employee={employee} refreshEmployees={refreshEmployees} />
-        }
+        {employee.editable && <Button label="แก้ไข" onClick={onOpenEditEmployeeModal} />}
+        {employee.editable && (
+          <EditEmployeeModal
+            state={editEmployeeModal}
+            onClose={onCloseEditEmployeeModal}
+            onOpen={onOpenEditEmployeeModal}
+            employee={employee}
+            refreshEmployees={refreshEmployees}
+          />
+        )}
       </Stack>
     </MuiCard>
   );

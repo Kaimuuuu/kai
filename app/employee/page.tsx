@@ -56,15 +56,14 @@ export default function EditMenu() {
                 <Button label="เพิ่มพนักงาน" onClick={onOpenNewEmployeeModal} />
               </Box>
             )}
-            <TextField label="ค้นหาพนักงานด้วยชื่อ" onChange={(e) => setSearchQuery(e.target.value)} />
+            <TextField
+              label="ค้นหาพนักงานด้วยชื่อ"
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </Stack>
           <Stack spacing={2} width={"100%"}>
             {filterdEmployees.map((employee) => (
-              <EmployeeCard 
-                employee={employee}
-                key={employee.id}
-                refreshEmployees={refreshing}
-              />
+              <EmployeeCard employee={employee} key={employee.id} refreshEmployees={refreshing} />
             ))}
           </Stack>
         </Stack>

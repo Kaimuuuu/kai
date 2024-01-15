@@ -158,17 +158,17 @@ export interface Employee {
 export type EmployeeRoleName = "Admin" | "Chef" | "Waiter";
 
 export interface CreateEmployeeRequest {
-  name: string
-  age: number
-  role: EmployeeRole
-  imagePath: string
-  email: string
+  name: string;
+  age: number;
+  role: EmployeeRole;
+  imagePath: string;
+  email: string;
 }
 
 export interface UpdateEmployeeRequest {
-  name: string
-  age: number
-  role: EmployeeRole
-  imagePath: string
-  email: string
+  name: string;
+  age: number;
+  role: EmployeeRole;
+  imagePath: string;
+  email: string;
 }
