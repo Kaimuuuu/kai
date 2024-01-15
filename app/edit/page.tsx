@@ -5,7 +5,7 @@ import EditMenuCard from "@/components/menu/editMenuCard";
 import Navbar from "@/components/layout/navbar";
 import Heading from "@/components/typo/heading";
 import { getEditMenu } from "@/services/menuService";
-import { Menu } from "@/types";
+import { EmployeeRole, Menu } from "@/types";
 import { Box, Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import useLocalStorage from "@/hooks/useLocalStorage";
@@ -53,9 +53,11 @@ export default function EditMenu() {
         <Navbar />
         <Stack alignItems={"center"} spacing={"10px"}>
           <Stack direction={"row"} width={"100%"} spacing={"10px"}>
-            <Box width={"30%"}>
-              <Button label="เพิ่มเมนู" onClick={onOpenNewMenuModal} />
-            </Box>
+            {Number(role) === EmployeeRole.Admin && (
+              <Box width={"30%"}>
+                <Button label="เพิ่มเมนู" onClick={onOpenNewMenuModal} />
+              </Box>
+            )}
             <TextField label="ค้นหาเมนูตามชื่อ" onChange={(e) => setSearchQuery(e.target.value)} />
           </Stack>
           <Stack spacing={2} width={"100%"}>

@@ -28,14 +28,28 @@ export default function EditMenuCard({ menuItem, refreshEditMenus }: Props) {
 
   const onSwitchOutOfStock = () => {
     Swal.fire({
-      title: `ต้องการเปลี่ยนสถาณะเมนู "${menuItem.name}" เป็นหมด?`,
+      title: `ต้องการเปลี่ยนสถาณะเมนู "${menuItem.name}" เป็น ${isOutOfStock ? `"ไม่หมด"` : `"หมด"`}?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "ตกลง",
       cancelButtonText: "ยกเลิก",
     }).then((result) => {
       if (result.isConfirmed) {
-        toggleOutOfStock(token, menuItem.id, !isOutOfStock);
+        toggleOutOfStock(token, menuItem.id, !isOutOfStock)
+          .then(() => {
+            Swal.fire({
+              title: `เปลี่ยนสถาณะเมนู "${menuItem.name}" เป็น ${isOutOfStock ? `"ไม่หมด"` : `"หมด"`} สำเร็จ`,
+              icon: "success",
+              confirmButtonText: "ตกลง",
+            });
+          })
+          .catch((err) => {
+            Swal.fire({
+              title: `เปลี่ยนสถาณะเมนู "${menuItem.name}" เป็น ${isOutOfStock ? `"ไม่หมด"` : `"หมด"`} ล้มเหลว`,
+              icon: "error",
+              confirmButtonText: "ตกลง",
+            });
+          })
         setIsOutOfStock(!isOutOfStock);
       }
     });
