@@ -62,7 +62,13 @@ export default function EditMenuModal({
               confirmButtonText: "ตกลง",
             });
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            Swal.fire({
+              title: "ลบเมนูล้มเหลว",
+              icon: "error",
+              confirmButtonText: "ตกลง",
+            });
+          });
       }
     });
   };

@@ -142,3 +142,33 @@ export interface UpdateMenuRequest {
   price: number;
   imagePath: string;
 }
+
+export interface Employee {
+  id: string;
+  name: string;
+  age: number;
+  role: EmployeeRole;
+  email: string;
+  imagePath: string;
+  createdAt: Date;
+  createdBy: string;
+  editable: boolean;
+}
+
+export type EmployeeRoleName = "Admin" | "Chef" | "Waiter";
+
+export interface CreateEmployeeRequest {
+  name: string
+  age: number
+  role: EmployeeRole
+  imagePath: string
+  email: string
+}
+
+export interface UpdateEmployeeRequest {
+  name: string
+  age: number
+  role: EmployeeRole
+  imagePath: string
+  email: string
+}
