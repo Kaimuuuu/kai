@@ -29,6 +29,19 @@ export default function Home() {
   const [summaryOderModal, setSummaryOrderModal] = useState<boolean>(false);
   const [summaryOrderHistoryModal, setSummaryOrderHistoryModal] = useState<boolean>(false);
   const [token, setToken] = useLocalStorage(LOCAL_STORAGE_CLIENT_TOKEN, "");
+  const [refresh, setRefresh] = useState<boolean>(false);
+
+  const refreshing = () => {
+    setRefresh(!refresh);
+  };
+
+  // polling every 5s
+  const pollingMenu = () => {
+    setTimeout(() => {
+      refreshing();
+      pollingMenu();
+    }, 5 * 1e3);
+  };
 
   useEffect(() => {
     getMenu(token)
@@ -36,7 +49,8 @@ export default function Home() {
         setMenus(menus);
       })
       .catch((err) => console.log(err));
-  }, [token]);
+    pollingMenu();
+  }, [token, refresh]);
 
   const tags = menus.map((menu) => menu.catagory);
 
