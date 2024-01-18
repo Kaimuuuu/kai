@@ -21,7 +21,16 @@ export default function Order() {
         setOrders(orders);
       })
       .catch((err) => console.log(err));
+    polling();
   }, [token, refresh]);
+
+  // polling every 5s
+  const polling = () => {
+    setTimeout(() => {
+      refreshing();
+      polling();
+    }, 5 * 1e3);
+  };
 
   const refreshing = () => setRefresh(!refresh);
 
