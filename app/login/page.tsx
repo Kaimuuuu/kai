@@ -21,10 +21,10 @@ export default function Login() {
         .then(() => {
           router.push("/edit");
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((err: Error) => {
           Swal.fire({
             title: "เกิดข้อผิดพลาด!",
+            text: err.message,
             icon: "error",
             confirmButtonText: "ตกลง",
           });

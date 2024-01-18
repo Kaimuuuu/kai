@@ -172,3 +172,7 @@ export interface UpdateEmployeeRequest {
   imagePath: string;
   email: string;
 }
+
+export interface ErrorResponse {
+  errMessage: string;
+}

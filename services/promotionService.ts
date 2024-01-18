@@ -1,6 +1,7 @@
 import {
   CreatePromotionRequest,
   EmployeeRole,
+  ErrorResponse,
   MenuItem,
   Promotion,
   PromotionMenuItem,
@@ -8,6 +9,7 @@ import {
   UpdatePromotionRequest,
 } from "@/types";
 import { getAllMenu } from "./menuService";
+import { StatusCode } from "@/constants";
 
 export async function getPromotions(token: string, role: EmployeeRole) {
   const res = await fetch(`${process.env.BACKEND_URL}/promotion`, {
@@ -43,8 +45,9 @@ export async function generateQrCode(
     }),
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.CREATED) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 
   const data: { clientToken: string } = await res.json();
@@ -102,8 +105,9 @@ export async function createPromotion(token: string, req: CreatePromotionRequest
     body: JSON.stringify(req),
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.CREATED) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 }
 
@@ -121,8 +125,9 @@ export async function updatePromotion(
     body: JSON.stringify(req),
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.OK) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 }
 
@@ -134,8 +139,9 @@ export async function deletePromotion(token: string, promotionId: string): Promi
     },
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.OK) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 }
 

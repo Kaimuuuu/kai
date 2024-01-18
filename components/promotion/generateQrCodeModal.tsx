@@ -36,9 +36,10 @@ export default function GenerateQrCodeModal({ promotion, state, onOpen, onClose 
             confirmButtonText: "ตกลง",
           });
         })
-        .catch((err) => {
+        .catch((err: Error) => {
           Swal.fire({
-            title: "สร้าง QR Code ไม่สำเร็จ",
+            title: "สร้าง QR Code ล้มเหลว",
+            text: err.message,
             icon: "error",
             confirmButtonText: "ตกลง",
           });

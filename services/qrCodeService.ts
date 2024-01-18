@@ -1,4 +1,5 @@
-import { CheckoutSummaryObject, OrderItem, QrCode } from "@/types";
+import { StatusCode } from "@/constants";
+import { CheckoutSummaryObject, ErrorResponse, OrderItem, QrCode } from "@/types";
 
 export async function getQrCode(token: string) {
   const res = await fetch(`${process.env.BACKEND_URL}/client`, {
@@ -33,7 +34,8 @@ export async function checkout(clientToken: string, employeeToken: string): Prom
     },
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.CREATED) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 }

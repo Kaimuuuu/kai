@@ -82,9 +82,10 @@ export default function EditEmployeeModal({
             confirmButtonText: "ตกลง",
           });
         })
-        .catch((err) => {
+        .catch((err: Error) => {
           Swal.fire({
             title: "แก้ไขข้อมูลพนักงานล้มเหลว",
+            text: err.message,
             icon: "error",
             confirmButtonText: "ตกลง",
           });
@@ -111,9 +112,10 @@ export default function EditEmployeeModal({
               confirmButtonText: "ตกลง",
             });
           })
-          .catch((err) => {
+          .catch((err: Error) => {
             Swal.fire({
               title: "ลบพนักงานล้มเหลว",
+              text: err.message,
               icon: "error",
               confirmButtonText: "ตกลง",
             });

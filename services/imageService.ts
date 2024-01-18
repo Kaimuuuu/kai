@@ -1,3 +1,6 @@
+import { StatusCode } from "@/constants";
+import { ErrorResponse } from "@/types";
+
 export async function uploadImage(token: string, image: File): Promise<string> {
   const formData = new FormData();
   formData.append("image", image);
@@ -10,8 +13,9 @@ export async function uploadImage(token: string, image: File): Promise<string> {
     body: formData,
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.CREATED) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 
   const data: { imagePath: string } = await res.json();

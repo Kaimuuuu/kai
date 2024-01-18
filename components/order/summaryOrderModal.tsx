@@ -41,9 +41,10 @@ export default function SummaryOrderModal({ state, onOpen, onClose, cart, resetC
         });
         resetCart();
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         Swal.fire({
           title: "สั่งอาหารล้มเหลว",
+          text: err.message,
           icon: "error",
           confirmButtonAriaLabel: "ตกลง",
         });

@@ -6,8 +6,8 @@ import TextField from "../textField";
 import { ChangeEvent } from "react";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
-import { CreateMenuRequest, MenuItem, UpdateMenuRequest } from "@/types";
-import { createMenu, deleteMenu, updateMenu } from "@/services/menuService";
+import { MenuItem, UpdateMenuRequest } from "@/types";
+import { deleteMenu, updateMenu } from "@/services/menuService";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
 import { uploadImage } from "@/services/imageService";
@@ -62,9 +62,10 @@ export default function EditMenuModal({
               confirmButtonText: "ตกลง",
             });
           })
-          .catch((err) => {
+          .catch((err: Error) => {
             Swal.fire({
               title: "ลบเมนูล้มเหลว",
+              text: err.message,
               icon: "error",
               confirmButtonText: "ตกลง",
             });
@@ -82,6 +83,7 @@ export default function EditMenuModal({
       price: menuItem.price,
     },
     onSubmit: async (values) => {
+      onClose();
       let imagePath = menuItem.imagePath;
       if (imageFile) {
         imagePath = await uploadImage(token, imageFile);
@@ -97,7 +99,6 @@ export default function EditMenuModal({
       };
       updateMenu(token, req, menuItem.id)
         .then(() => {
-          onClose();
           refreshEditMenus();
           Swal.fire({
             title: "แก้ไขเมนูสำเร็จ",
@@ -105,7 +106,14 @@ export default function EditMenuModal({
             confirmButtonText: "ตกลง",
           });
         })
-        .catch((err) => console.log(err));
+        .catch((err: Error) => {
+          Swal.fire({
+            title: "แก้ไขเมนูล้มเหลว",
+            text: err.message,
+            icon: "error",
+            confirmButtonText: "ตกลง",
+          });
+        });
     },
   });
 

@@ -82,6 +82,7 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
       description: "",
     },
     onSubmit: async (values) => {
+      onClose();
       let imagePath = "";
       if (imageFile) {
         imagePath = await uploadImage(token, imageFile);
@@ -107,7 +108,6 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
       };
       createPromotion(token, req)
         .then(() => {
-          onClose();
           refreshPromotions();
           Swal.fire({
             title: "สร้างโปรโมชั่นสำเร็จ",
@@ -115,7 +115,14 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
             confirmButtonText: "ตกลง",
           });
         })
-        .catch((err) => console.log(err));
+        .catch((err: Error) => {
+          Swal.fire({
+            title: "สร้างโปรโมชั่นล้มเหลว",
+            text: err.message,
+            icon: "error",
+            confirmButtonText: "ตกลง",
+          });
+        });
     },
   });
 

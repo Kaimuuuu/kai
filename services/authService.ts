@@ -1,5 +1,5 @@
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN, LOCAL_STORAGE_ROLE } from "@/constants";
-import { EmployeeRole } from "@/types";
+import { LOCAL_STORAGE_EMPLOYEE_TOKEN, LOCAL_STORAGE_ROLE, StatusCode } from "@/constants";
+import { EmployeeRole, ErrorResponse } from "@/types";
 
 export async function login(email: string, password: string) {
   const res = await fetch(`${process.env.BACKEND_URL}/auth/sign-in`, {
@@ -13,8 +13,9 @@ export async function login(email: string, password: string) {
     }),
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.CREATED) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 
   const data: { token: string; role: EmployeeRole } = await res.json();

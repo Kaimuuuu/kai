@@ -1,4 +1,12 @@
-import { CreateMenuRequest, EmployeeRole, Menu, MenuItem, UpdateMenuRequest } from "@/types";
+import { StatusCode } from "@/constants";
+import {
+  CreateMenuRequest,
+  EmployeeRole,
+  ErrorResponse,
+  Menu,
+  MenuItem,
+  UpdateMenuRequest,
+} from "@/types";
 
 export async function getMenu(token: string): Promise<Menu[]> {
   const res = await fetch(`${process.env.BACKEND_URL}/menu`, {
@@ -58,8 +66,9 @@ export async function toggleOutOfStock(
     }),
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.OK) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 }
 
@@ -86,8 +95,9 @@ export async function createMenu(token: string, req: CreateMenuRequest): Promise
     body: JSON.stringify(req),
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.CREATED) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 }
 
@@ -105,8 +115,9 @@ export async function updateMenu(
     body: JSON.stringify(req),
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.OK) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 }
 
@@ -118,8 +129,9 @@ export async function deleteMenu(token: string, menuId: string): Promise<void> {
     },
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.OK) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 }
 

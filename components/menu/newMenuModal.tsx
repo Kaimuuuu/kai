@@ -45,6 +45,7 @@ export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus 
       price: "",
     },
     onSubmit: async (values) => {
+      onClose();
       let imagePath = "";
       if (imageFile) {
         imagePath = await uploadImage(token, imageFile);
@@ -61,7 +62,6 @@ export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus 
       };
       createMenu(token, req)
         .then(() => {
-          onClose();
           refreshEditMenus();
           Swal.fire({
             title: "สร้างเมนูสำเร็จ",
@@ -69,7 +69,14 @@ export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus 
             confirmButtonText: "ตกลง",
           });
         })
-        .catch((err) => console.log(err));
+        .catch((err: Error) => {
+          Swal.fire({
+            title: "สร้างเมนูล้มเหลว",
+            text: err.message,
+            icon: "error",
+            confirmButtonText: "ตกลง",
+          });
+        });
     },
   });
 

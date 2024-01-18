@@ -15,3 +15,9 @@ export const DEFALUT_IMAGE_PATH = "/default-image.png";
 export const EMPLOYEE_ROLE_NAME_ADMIN = "Admin";
 export const EMPLOYEE_ROLE_NAME_CHEF = "Chef";
 export const EMPLOYEE_ROLE_NAME_WAITER = "Waiter";
+
+export enum StatusCode {
+  OK = 200,
+  CREATED = 201,
+  BAD_REQUEST = 400,
+}

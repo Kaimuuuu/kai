@@ -1,4 +1,11 @@
-import { CreateEmployeeRequest, Employee, EmployeeRole, UpdateEmployeeRequest } from "@/types";
+import { StatusCode } from "@/constants";
+import {
+  CreateEmployeeRequest,
+  Employee,
+  EmployeeRole,
+  ErrorResponse,
+  UpdateEmployeeRequest,
+} from "@/types";
 
 export async function getEmployees(token: string, role: EmployeeRole): Promise<Employee[]> {
   const res = await fetch(`${process.env.BACKEND_URL}/employee`, {
@@ -25,8 +32,9 @@ export async function createEmployee(token: string, req: CreateEmployeeRequest):
     body: JSON.stringify(req),
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.CREATED) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 
   const data: { generatedPassword: string } = await res.json();
@@ -48,8 +56,9 @@ export async function updateEmployee(
     body: JSON.stringify(req),
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.OK) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 }
 
@@ -61,7 +70,8 @@ export async function deleteEmployee(token: string, employeeId: string): Promise
     },
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.OK) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 }

@@ -37,9 +37,10 @@ export default function OrderCard({ order, refreshOrders }: Props) {
               confirmButtonText: "ตกลง",
             });
           })
-          .catch((err) => {
+          .catch((err: Error) => {
             Swal.fire({
               title: "อัพเดจสถานะคำสั่งอาหารล้มเหลว",
+              text: err.message,
               icon: "error",
               confirmButtonText: "ตกลง",
             });

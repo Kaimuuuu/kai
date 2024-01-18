@@ -1,4 +1,5 @@
-import { CartItem, Order, OrderStatus, SummaryOrderHistory } from "@/types";
+import { StatusCode } from "@/constants";
+import { CartItem, ErrorResponse, Order, OrderStatus, SummaryOrderHistory } from "@/types";
 
 export async function getOrder(token: string): Promise<Order[]> {
   const res = await fetch(`${process.env.BACKEND_URL}/order/pending`, {
@@ -28,8 +29,9 @@ export async function createOrder(token: string, cart: CartItem[]) {
     }),
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.CREATED) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 }
 
@@ -79,7 +81,8 @@ export async function updateOrderStatus(
     }),
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.OK) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 }

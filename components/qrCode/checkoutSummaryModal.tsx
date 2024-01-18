@@ -57,9 +57,10 @@ export default function CheckoutSummaryModal({
           confirmButtonText: "ตกลง",
         });
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         Swal.fire({
           title: "คิดเงินล้มเหลว",
+          text: err.message,
           icon: "error",
           confirmButtonAriaLabel: "ตกลง",
         });

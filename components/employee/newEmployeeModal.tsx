@@ -1,13 +1,11 @@
 import { MenuItem, Modal, Select, Stack } from "@mui/material";
 import ModalStack from "../modalStack";
-import TextArea from "../textArea";
 import Button from "../button";
 import TextField from "../textField";
 import { ChangeEvent, useState } from "react";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
-import { CreateEmployeeRequest, CreateMenuRequest, EmployeeRoleName } from "@/types";
-import { createMenu } from "@/services/menuService";
+import { CreateEmployeeRequest, EmployeeRoleName } from "@/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import {
   EMPLOYEE_ROLE_NAME_ADMIN,
@@ -75,9 +73,10 @@ export default function NewEmployeeModal({ state, onClose, onOpen, refreshEmploy
             confirmButtonText: "ตกลง",
           });
         })
-        .catch((err) => {
+        .catch((err: Error) => {
           Swal.fire({
             title: "เพิ่มพนักงานล้มเหลว",
+            text: err.message,
             icon: "error",
             confirmButtonText: "ตกลง",
           });

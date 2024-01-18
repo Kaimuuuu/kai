@@ -132,9 +132,10 @@ export default function EditPromotionModal({
             confirmButtonText: "ตกลง",
           });
         })
-        .catch((err) => {
+        .catch((err: Error) => {
           Swal.fire({
             title: "แก้ไขโมชั่นไม่สำเร็จ",
+            text: err.message,
             icon: "error",
             confirmButtonText: "ตกลง",
           });
@@ -161,9 +162,10 @@ export default function EditPromotionModal({
               confirmButtonText: "ตกลง",
             });
           })
-          .catch((err) => {
+          .catch((err: Error) => {
             Swal.fire({
               title: "ลบโปรโมชั่นไม่สำเร็จ",
+              text: err.message,
               icon: "error",
               confirmButtonText: "ตกลง",
             });

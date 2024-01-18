@@ -45,9 +45,10 @@ export default function EditMenuCard({ menuItem, refreshEditMenus }: Props) {
               confirmButtonText: "ตกลง",
             });
           })
-          .catch((err) => {
+          .catch((err: Error) => {
             Swal.fire({
               title: `เปลี่ยนสถาณะเมนู "${menuItem.name}" เป็น ${isOutOfStock ? `"ไม่หมด"` : `"หมด"`} ล้มเหลว`,
+              text: err.message,
               icon: "error",
               confirmButtonText: "ตกลง",
             });
