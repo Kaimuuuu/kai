@@ -36,10 +36,10 @@ export default function Home() {
   };
 
   // polling every 5s
-  const pollingMenu = () => {
+  const polling = () => {
     setTimeout(() => {
       refreshing();
-      pollingMenu();
+      polling();
     }, 5 * 1e3);
   };
 
@@ -49,7 +49,7 @@ export default function Home() {
         setMenus(menus);
       })
       .catch((err) => console.log(err));
-    pollingMenu();
+    polling();
   }, [token, refresh]);
 
   const tags = menus.map((menu) => menu.catagory);
