@@ -69,8 +69,7 @@ export default function OrderCard({ order, refreshOrders }: Props) {
           ))}
         </Stack>
         <Body bold>{`โต๊ะที่: ${order.tableNumber}`}</Body>
-        {
-          (Number(role) === EmployeeRole.Chef || Number(role) === EmployeeRole.Admin) &&
+        {(Number(role) === EmployeeRole.Chef || Number(role) === EmployeeRole.Admin) && (
           <>
             <Button label="สำเร็จ" onClick={() => onUpdate(OrderStatus.Success)} />
             <Button
@@ -79,7 +78,7 @@ export default function OrderCard({ order, refreshOrders }: Props) {
               onClick={() => onUpdate(OrderStatus.Decline)}
             />
           </>
-        }
+        )}
       </Stack>
     </MuiCard>
   );

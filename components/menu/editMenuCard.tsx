@@ -79,18 +79,17 @@ export default function EditMenuCard({ menuItem, refreshEditMenus }: Props) {
             <Body>{menuItem.description}</Body>
             <Stack direction={"row"} alignItems={"center"} sx={{ marginTop: "auto" }}>
               <Body bold>{`ราคา: ${menuItem.price}฿`}</Body>
-              {
-                (Number(role) === EmployeeRole.Admin || Number(role) === EmployeeRole.Chef) &&
-                  <Stack
-                    alignItems={"center"}
-                    direction={"row"}
-                    sx={{ marginLeft: "auto" }}
-                    spacing={0.2}
-                  >
-                    <Body bold>{`หมด: `}</Body>
-                    <IOSSwitch checked={isOutOfStock} onClick={onSwitchOutOfStock} />
-                  </Stack>
-              }
+              {(Number(role) === EmployeeRole.Admin || Number(role) === EmployeeRole.Chef) && (
+                <Stack
+                  alignItems={"center"}
+                  direction={"row"}
+                  sx={{ marginLeft: "auto" }}
+                  spacing={0.2}
+                >
+                  <Body bold>{`หมด: `}</Body>
+                  <IOSSwitch checked={isOutOfStock} onClick={onSwitchOutOfStock} />
+                </Stack>
+              )}
             </Stack>
           </Stack>
         </Stack>

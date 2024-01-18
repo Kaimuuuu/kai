@@ -43,10 +43,9 @@ export default function Promotion() {
         <Navbar />
         <Stack alignItems={"center"} spacing={"10px"}>
           <Heading>โปรโมชั่น</Heading>
-          {
-            Number(role) === EmployeeRole.Admin &&
-              <Button label="สร้าง Promotion" onClick={onOpenNewPromotionModal} />
-          }
+          {Number(role) === EmployeeRole.Admin && (
+            <Button label="สร้าง Promotion" onClick={onOpenNewPromotionModal} />
+          )}
           {promotions.map((promotion) => (
             <PromotionCard
               promotion={promotion}
@@ -55,15 +54,14 @@ export default function Promotion() {
             />
           ))}
         </Stack>
-        {
-          Number(role) === EmployeeRole.Admin &&
-            <NewPromotionModal
-              onOpen={onOpenNewPromotionModal}
-              onClose={onCloseNewPromotionModal}
-              state={newPromotionModal}
-              refreshPromotions={refreshing}
-            />
-        }
+        {Number(role) === EmployeeRole.Admin && (
+          <NewPromotionModal
+            onOpen={onOpenNewPromotionModal}
+            onClose={onCloseNewPromotionModal}
+            state={newPromotionModal}
+            refreshPromotions={refreshing}
+          />
+        )}
       </Container>
     </main>
   );
