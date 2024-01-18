@@ -8,12 +8,29 @@ import { MenuItem } from "@/types";
 export default function Recommands() {
   const [recommands, setRecommands] = useState<MenuItem[]>([]);
   const [token, setToken] = useLocalStorage("clientToken", "");
+  const [refresh, setRefresh] = useState<boolean>(false);
+
+  const refreshing = () => {
+    setRefresh(!refresh);
+  };
+
+  // polling every 15m
+  const polling = () => {
+    setTimeout(
+      () => {
+        refreshing();
+        polling();
+      },
+      15 * 60 * 1e3,
+    );
+  };
 
   useEffect(() => {
     getRecommand(token)
       .then((menus) => setRecommands(menus))
       .catch((err) => console.log(err));
-  }, [token]);
+    polling();
+  }, [token, refresh]);
 
   return (
     <Box
