@@ -43,11 +43,12 @@ export async function getSummaryOrderHistory(token: string): Promise<SummaryOrde
     },
   });
 
-  if (res.status !== 200) {
-    throw new Error();
+  if (res.status !== StatusCode.OK) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
   }
 
-  const data: Order[] = await res.json();
+  let data: Order[] = await res.json();
 
   let total = 0;
   data

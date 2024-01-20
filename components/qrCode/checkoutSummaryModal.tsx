@@ -37,7 +37,7 @@ export default function CheckoutSummaryModal({
     remainingDuration: 0,
     totalPrice: 0,
     orderItems: [],
-    createdAt: new Date(),
+    createdAt: "",
   });
 
   useEffect(() => {

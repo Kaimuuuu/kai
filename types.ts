@@ -37,7 +37,7 @@ export enum OrderStatus {
 export interface Order {
   id: string;
   status: OrderStatus;
-  createdAt: Date;
+  createdAt: string;
   orderItems: OrderItem[];
   tableNumber: number;
 }
@@ -68,7 +68,7 @@ export interface QrCode {
   promotionId: string;
   promotionName: string;
   expire: Date;
-  createdAt: Date;
+  createdAt: string;
   createdBy: string;
 }
 
@@ -99,7 +99,7 @@ export interface CheckoutSummaryObject {
   promotionName: string;
   size: number;
   remainingDuration: number;
-  createdAt: Date;
+  createdAt: string;
   totalPrice: number;
   orderItems: OrderItem[];
 }
@@ -150,7 +150,7 @@ export interface Employee {
   role: EmployeeRole;
   email: string;
   imagePath: string;
-  createdAt: Date;
+  createdAt: string;
   createdBy: string;
   editable: boolean;
 }
