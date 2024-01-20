@@ -1,3 +1,47 @@
+This repository contains the frontend code of the project. The corresponding backend repository can be found at the following link: https://github.com/Kaimuuuu/muu
+
+The backend repository contains all of the necessary code to build and run the API for the project. It is built using Golang and is accessed by the frontend through API calls.
+
+# Project Overview
+This project is a platform that allows the 'client' to view the menu and order food, while the 'admin,' 'chef,' and 'waiter' can interact with the system depending on the use cases.
+
+The following use cases are available to users:
+
+Client:
+
+- Scan the QR code to enter the landing page.
+- View the menu items depending on the selected promotion (each promotion has a different menu list).
+- Order food.
+- Cannot order when the order exceeds the weight limit (this prevents the order from bottlenecking the entire system when the order is too large, in other words, if it has many foods in one order).
+- View their own ordering history; they can also view the order status, either declined or successful, and the total price of ordered foods.
+- View recommended foods (foods suggested based on order count).
+
+Waiter:
+
+- Log in and log out of their account.
+- View a list of available promotions.
+- Generate QR Code for new clients.
+- View the list of QR Codes.
+- Checkout.
+
+Chef:
+
+- Log in and log out of their account.
+- View a list of pending orders.
+- Update order status (success or declined).
+- View a list of menus and also update menu item status to out of stock to prevent clients from ordering.
+
+Admin:
+
+- Log in and log out of their account.
+- Create/View/Update/Delete the list of employees.
+- Create/View/Update/Delete the list of menus.
+- Create/View/Update/Delete the list of promotions.
+- Update order status (success or declined).
+- View the list of QR Codes.
+- Checkout.
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
