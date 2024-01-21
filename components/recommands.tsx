@@ -14,22 +14,16 @@ export default function Recommands() {
     setRefresh(!refresh);
   };
 
-  // polling every 15m
-  const polling = () => {
-    setTimeout(
-      () => {
-        refreshing();
-        polling();
-      },
-      15 * 60 * 1e3,
-    );
-  };
-
   useEffect(() => {
     getRecommand(token)
       .then((menus) => setRecommands(menus))
       .catch((err) => console.log(err));
-    polling();
+
+    const pollingId = setInterval(() => {
+      refreshing();
+    }, 15 * 60 * 1e3);
+
+    return () => clearInterval(pollingId);
   }, [token, refresh]);
 
   return (

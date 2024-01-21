@@ -35,21 +35,18 @@ export default function Home() {
     setRefresh(!refresh);
   };
 
-  // polling every 5s
-  const polling = () => {
-    setTimeout(() => {
-      refreshing();
-      polling();
-    }, 5 * 1e3);
-  };
-
   useEffect(() => {
     getMenu(token)
       .then((menus) => {
         setMenus(menus);
       })
       .catch((err) => console.log(err));
-    polling();
+
+    const pollingId = setInterval(() => {
+      refreshing();
+    }, 5 * 1e3);
+
+    return () => clearInterval(pollingId);
   }, [token, refresh]);
 
   const tags = menus.map((menu) => menu.catagory);
