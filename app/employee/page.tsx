@@ -39,10 +39,8 @@ export default function EditMenu() {
   return (
     <main
       style={{
-        backgroundColor: "#FAFAFA",
         paddingTop: "20px",
         paddingBottom: "20px",
-        minHeight: "100vh",
       }}
     >
       <Container>

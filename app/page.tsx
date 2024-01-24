@@ -112,10 +112,8 @@ export default function Home() {
   return (
     <main
       style={{
-        backgroundColor: "#FAFAFA",
         paddingTop: "20px",
         paddingBottom: "20px",
-        minHeight: "100vh",
       }}
     >
       <Container>

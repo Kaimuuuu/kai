@@ -29,10 +29,8 @@ export default function QrCode() {
   return (
     <main
       style={{
-        backgroundColor: "#FAFAFA",
         paddingTop: "20px",
         paddingBottom: "20px",
-        minHeight: "100vh",
       }}
     >
       <Container>

@@ -35,7 +35,6 @@ export default function Login() {
   return (
     <main
       style={{
-        backgroundColor: "#FAFAFA",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
