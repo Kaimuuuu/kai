@@ -8,8 +8,6 @@ import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { MenuItem, UpdateMenuRequest } from "@/types";
 import { deleteMenu, updateMenu } from "@/services/menuService";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import { DEFAULT_EMPLOYEE_TOKEN, LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
 import { uploadImage } from "@/services/imageService";
 import usePreviewImage from "@/hooks/usePreviewImage";
 import MyImage from "../image";

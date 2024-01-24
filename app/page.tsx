@@ -30,23 +30,29 @@ export default function Home() {
   const [summaryOrderHistoryModal, setSummaryOrderHistoryModal] = useState<boolean>(false);
   const token = useClientToken();
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const refreshing = () => {
     setRefresh(!refresh);
   };
 
   useEffect(() => {
-    getMenu(token)
-      .then((menus) => {
-        setMenus(menus);
-      })
-      .catch((err) => console.log(err));
+    if (token) {
+      getMenu(token)
+        .then((menus) => {
+          setMenus(menus);
+          setIsLoading(false);
+        })
+        .catch((err) => console.log(err));
+    }
 
-    const pollingId = setInterval(() => {
-      refreshing();
-    }, 5 * 1e3);
+    if (!isLoading) {
+      const pollingId = setInterval(() => {
+        refreshing();
+      }, 5 * 1e3);
 
-    return () => clearInterval(pollingId);
+      return () => clearInterval(pollingId);
+    }
   }, [token, refresh]);
 
   const tags = menus.map((menu) => menu.catagory);

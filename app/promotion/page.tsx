@@ -20,9 +20,11 @@ export default function Promotion() {
   const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
-    getPromotions(token, role)
-      .then((promotions) => setPromotions(promotions))
-      .catch((err) => console.log(err));
+    if (token) {
+      getPromotions(token, role)
+        .then((promotions) => setPromotions(promotions))
+        .catch((err) => console.log(err));
+    }
   }, [token, refresh]);
 
   const onOpenNewPromotionModal = () => setNewPromotionModal(true);

@@ -6,13 +6,10 @@ import { ChangeEvent, useState } from "react";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { CreateEmployeeRequest, EmployeeRoleName } from "@/types";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import {
-  DEFAULT_EMPLOYEE_TOKEN,
   EMPLOYEE_ROLE_NAME_ADMIN,
   EMPLOYEE_ROLE_NAME_CHEF,
   EMPLOYEE_ROLE_NAME_WAITER,
-  LOCAL_STORAGE_EMPLOYEE_TOKEN,
 } from "@/constants";
 import { uploadImage } from "@/services/imageService";
 import usePreviewImage from "@/hooks/usePreviewImage";

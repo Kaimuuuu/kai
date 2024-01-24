@@ -28,11 +28,13 @@ export default function EditMenu() {
   const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
-    getEditMenu(token, role)
-      .then((menus) => {
-        setMenus(menus);
-      })
-      .catch((err) => console.log(err));
+    if (token) {
+      getEditMenu(token, role)
+        .then((menus) => {
+          setMenus(menus);
+        })
+        .catch((err) => console.log(err));
+    }
   }, [token, refresh]);
 
   const onOpenNewMenuModal = () => setNewMenuModal(true);

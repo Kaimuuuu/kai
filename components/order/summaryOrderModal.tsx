@@ -24,9 +24,11 @@ export default function SummaryOrderModal({ state, onOpen, onClose, cart, resetC
   const [weightLimit, setWeightLimit] = useState<number>(0);
 
   useEffect(() => {
-    getWeight(token)
-      .then((weight) => setWeightLimit(weight))
-      .catch((err) => console.log(err));
+    if (token) {
+      getWeight(token)
+        .then((weight) => setWeightLimit(weight))
+        .catch((err) => console.log(err));
+    }
   }, [token]);
 
   const onClickOrder = () => {

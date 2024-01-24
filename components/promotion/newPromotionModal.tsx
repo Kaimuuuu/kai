@@ -53,11 +53,13 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
   const MAX_MINUTES = 59;
 
   useEffect(() => {
-    getAllPromotionMenuItems(token)
-      .then((promotionMenuItems) => {
-        setPromotionMenuItems(promotionMenuItems);
-      })
-      .catch((err) => console.log(err));
+    if (token) {
+      getAllPromotionMenuItems(token)
+        .then((promotionMenuItems) => {
+          setPromotionMenuItems(promotionMenuItems);
+        })
+        .catch((err) => console.log(err));
+    }
   }, [token]);
 
   const filteredPromotionMenuItemsType = filterdPromotionMenuItems.filter((promotionMenuItem) =>

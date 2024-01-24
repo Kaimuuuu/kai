@@ -13,19 +13,24 @@ export default function Order() {
   const [orders, setOrders] = useState<OrderType[]>([]);
   const token = useEmployeeToken();
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getOrder(token)
-      .then((orders) => {
-        setOrders(orders);
-      })
-      .catch((err) => console.log(err));
+    if (token) {
+      getOrder(token)
+        .then((orders) => {
+          setOrders(orders);
+        })
+        .catch((err) => console.log(err));
+    }
 
-    const pollingId = setInterval(() => {
-      refreshing();
-    }, 5 * 1e3);
+    if (!isLoading) {
+      const pollingId = setInterval(() => {
+        refreshing();
+      }, 5 * 1e3);
 
-    return () => clearInterval(pollingId);
+      return () => clearInterval(pollingId);
+    }
   }, [token, refresh]);
 
   const refreshing = () => {

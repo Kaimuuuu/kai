@@ -40,9 +40,11 @@ export default function CheckoutSummaryModal({
   });
 
   useEffect(() => {
-    getCheckoutSummary(clientToken, token)
-      .then((summary) => setCheckoutSummary(summary))
-      .catch((err) => console.log(err));
+    if (token) {
+      getCheckoutSummary(clientToken, token)
+        .then((summary) => setCheckoutSummary(summary))
+        .catch((err) => console.log(err));
+    }
   }, [token]);
 
   const onCheckout = () => {

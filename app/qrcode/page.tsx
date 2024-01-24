@@ -15,11 +15,13 @@ export default function QrCode() {
   const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
-    getQrCode(token)
-      .then((qrCodesCard) => {
-        setQrCodes(qrCodesCard);
-      })
-      .catch((err) => console.log);
+    if (token) {
+      getQrCode(token)
+        .then((qrCodesCard) => {
+          setQrCodes(qrCodesCard);
+        })
+        .catch((err) => console.log);
+    }
   }, [token, refresh]);
 
   const refreshing = () => {

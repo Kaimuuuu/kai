@@ -68,11 +68,13 @@ export default function EditPromotionModal({
   const MAX_MINUTES = 59;
 
   useEffect(() => {
-    getPromotionMenuItems(token, promotion.id)
-      .then((promotionMenuItems) => {
-        setPromotionMenuItems(promotionMenuItems);
-      })
-      .catch((err) => console.log(err));
+    if (token) {
+      getPromotionMenuItems(token, promotion.id)
+        .then((promotionMenuItems) => {
+          setPromotionMenuItems(promotionMenuItems);
+        })
+        .catch((err) => console.log(err));
+    }
   }, [token, state]);
 
   const filteredPromotionMenuItemsType = filterdPromotionMenuItems.filter((promotionMenuItem) =>

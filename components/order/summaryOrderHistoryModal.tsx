@@ -23,11 +23,13 @@ export default function SummaryOrderHistoryModal({ state, onOpen, onClose }: Pro
   const token = useClientToken();
 
   useEffect(() => {
-    getSummaryOrderHistory(token)
-      .then((orders) => {
-        setSummaryOrders(orders);
-      })
-      .catch((err) => console.log(err));
+    if (token) {
+      getSummaryOrderHistory(token)
+        .then((orders) => {
+          setSummaryOrders(orders);
+        })
+        .catch((err) => console.log(err));
+    }
   }, [state, token]);
 
   return (

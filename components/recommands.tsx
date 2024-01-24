@@ -9,24 +9,32 @@ export default function Recommands() {
   const [recommands, setRecommands] = useState<MenuItem[]>([]);
   const token = useClientToken();
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const refreshing = () => {
     setRefresh(!refresh);
   };
 
   useEffect(() => {
-    getRecommand(token)
-      .then((menus) => setRecommands(menus))
-      .catch((err) => console.log(err));
+    if (token) {
+      getRecommand(token)
+        .then((menus) => {
+          setRecommands(menus);
+          setIsLoading(false);
+        })
+        .catch((err) => console.log(err));
+    }
 
-    const pollingId = setInterval(
-      () => {
-        refreshing();
-      },
-      15 * 60 * 1e3,
-    );
+    if (!isLoading) {
+      const pollingId = setInterval(
+        () => {
+          refreshing();
+        },
+        15 * 60 * 1e3,
+      );
 
-    return () => clearInterval(pollingId);
+      return () => clearInterval(pollingId);
+    }
   }, [token, refresh]);
 
   return (

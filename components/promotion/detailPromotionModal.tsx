@@ -40,9 +40,11 @@ export default function DetailPromotionModal({ promotion, state, onOpen, onClose
   const token = useEmployeeToken();
 
   useEffect(() => {
-    getPromotionMenuItems(token, promotion.id)
-      .then((promotionMenuItems) => setPromotionMenuItems(promotionMenuItems))
-      .catch((err) => console.log(err));
+    if (token) {
+      getPromotionMenuItems(token, promotion.id)
+        .then((promotionMenuItems) => setPromotionMenuItems(promotionMenuItems))
+        .catch((err) => console.log(err));
+    }
   }, [token, state]);
 
   const hourMinute = nanoSecondToHourMinute(promotion.duration);

@@ -24,11 +24,13 @@ export default function EditMenu() {
   const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
-    getEmployees(token, role)
-      .then((menus) => {
-        setEmployees(menus);
-      })
-      .catch((err) => console.log(err));
+    if (token) {
+      getEmployees(token, role)
+        .then((menus) => {
+          setEmployees(menus);
+        })
+        .catch((err) => console.log(err));
+    }
   }, [token, refresh]);
 
   const onOpenNewEmployeeModal = () => setNewEmployeeModal(true);
