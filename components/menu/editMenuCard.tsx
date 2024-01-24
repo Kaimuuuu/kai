@@ -7,11 +7,11 @@ import IOSSwitch from "../switch";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import { toggleOutOfStock } from "@/services/menuService";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN, LOCAL_STORAGE_ROLE } from "@/constants";
 import MyImage from "../image";
 import Button from "../button";
 import EditMenuModal from "./editMenuModal";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
+import useRole from "@/hooks/useRole";
 
 interface Props {
   menuItem: MenuItem;
@@ -20,8 +20,8 @@ interface Props {
 
 export default function EditMenuCard({ menuItem, refreshEditMenus }: Props) {
   const [isOutOfStock, setIsOutOfStock] = useState<boolean>(menuItem.outOfStock);
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
-  const [role, setRole] = useLocalStorage(LOCAL_STORAGE_ROLE, "");
+  const token = useEmployeeToken();
+  const role = useRole();
   const [editMenuModal, setEditMenuModal] = useState<boolean>(false);
 
   const onOpenEditMenuModal = () => setEditMenuModal(true);
@@ -80,7 +80,7 @@ export default function EditMenuCard({ menuItem, refreshEditMenus }: Props) {
             <Body>{menuItem.description}</Body>
             <Stack direction={"row"} alignItems={"center"} sx={{ marginTop: "auto" }}>
               <Body bold>{`ราคา: ${menuItem.price}฿`}</Body>
-              {(Number(role) === EmployeeRole.Admin || Number(role) === EmployeeRole.Chef) && (
+              {(role === EmployeeRole.Admin || role === EmployeeRole.Chef) && (
                 <Stack
                   alignItems={"center"}
                   direction={"row"}

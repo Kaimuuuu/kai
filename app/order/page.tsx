@@ -3,8 +3,7 @@
 import Navbar from "@/components/layout/navbar";
 import OrderCard from "@/components/order/orderCard";
 import Heading from "@/components/typo/heading";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
 import { getOrder } from "@/services/orderService";
 import { Order as OrderType } from "@/types";
 import { Container, Stack } from "@mui/material";
@@ -12,7 +11,7 @@ import { useEffect, useState } from "react";
 
 export default function Order() {
   const [orders, setOrders] = useState<OrderType[]>([]);
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const token = useEmployeeToken();
   const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
@@ -31,7 +30,7 @@ export default function Order() {
 
   const refreshing = () => {
     setRefresh(!refresh);
-  }
+  };
 
   return (
     <main

@@ -1,32 +1,30 @@
 "use client";
 
 import TextField from "@/components/textField";
-import EditMenuCard from "@/components/menu/editMenuCard";
 import Navbar from "@/components/layout/navbar";
-import Heading from "@/components/typo/heading";
 import { Employee, EmployeeRole, Menu } from "@/types";
 import { Box, Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import useSearch from "@/hooks/useSearch";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN, LOCAL_STORAGE_ROLE } from "@/constants";
 import Button from "@/components/button";
 import { getEmployees } from "@/services/employeeService";
 import EmployeeCard from "@/components/employee/employeeCard";
 import NewEmployeeModal from "@/components/employee/newEmployeeModal";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
+import useRole from "@/hooks/useRole";
 
 export default function EditMenu() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [filterdEmployees, setSearchQuery] = useSearch(employees, (employees, searchQuery) =>
     employees.filter((employee) => employee.name.includes(searchQuery)),
   );
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
-  const [role, setRole] = useLocalStorage(LOCAL_STORAGE_ROLE, "-1");
+  const token = useEmployeeToken();
+  const role = useRole();
   const [newEmployeeModal, setNewEmployeeModal] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
-    getEmployees(token, Number(role))
+    getEmployees(token, role)
       .then((menus) => {
         setEmployees(menus);
       })

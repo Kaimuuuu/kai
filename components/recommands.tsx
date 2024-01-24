@@ -1,13 +1,13 @@
 import { Box } from "@mui/material";
 import RecommandCard from "./recommandCard";
 import { useEffect, useState } from "react";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import { getRecommand } from "@/services/menuService";
 import { MenuItem } from "@/types";
+import useClientToken from "@/hooks/useClientToken";
 
 export default function Recommands() {
   const [recommands, setRecommands] = useState<MenuItem[]>([]);
-  const [token, setToken] = useLocalStorage("clientToken", "");
+  const token = useClientToken();
   const [refresh, setRefresh] = useState<boolean>(false);
 
   const refreshing = () => {
@@ -19,9 +19,12 @@ export default function Recommands() {
       .then((menus) => setRecommands(menus))
       .catch((err) => console.log(err));
 
-    const pollingId = setInterval(() => {
-      refreshing();
-    }, 15 * 60 * 1e3);
+    const pollingId = setInterval(
+      () => {
+        refreshing();
+      },
+      15 * 60 * 1e3,
+    );
 
     return () => clearInterval(pollingId);
   }, [token, refresh]);

@@ -18,6 +18,7 @@ import {
 } from "@/constants";
 import useSearch from "@/hooks/useSearch";
 import MyImage from "../image";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
 
 interface Props {
   promotion: Promotion;
@@ -36,7 +37,7 @@ export default function DetailPromotionModal({ promotion, state, onOpen, onClose
         promotionMenuItem.menuItem.name.includes(searchQuery),
       ),
   );
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const token = useEmployeeToken();
 
   useEffect(() => {
     getPromotionMenuItems(token, promotion.id)

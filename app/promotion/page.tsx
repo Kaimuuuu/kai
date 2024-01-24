@@ -8,19 +8,19 @@ import { getPromotions } from "@/services/promotionService";
 import { EmployeeRole, Promotion as PromotionType } from "@/types";
 import { Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import NewPromotionModal from "@/components/promotion/newPromotionModal";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN, LOCAL_STORAGE_ROLE } from "@/constants";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
+import useRole from "@/hooks/useRole";
 
 export default function Promotion() {
   const [promotions, setPromotions] = useState<PromotionType[]>([]);
   const [newPromotionModal, setNewPromotionModal] = useState<boolean>(false);
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
-  const [role, setRole] = useLocalStorage(LOCAL_STORAGE_ROLE, "-1");
+  const token = useEmployeeToken();
+  const role = useRole();
   const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
-    getPromotions(token, Number(role))
+    getPromotions(token, role)
       .then((promotions) => setPromotions(promotions))
       .catch((err) => console.log(err));
   }, [token, refresh]);

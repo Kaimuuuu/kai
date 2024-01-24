@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-export default function useLocalStorage<T>(
+export default function useLocalStorage(
   key: string,
-  initialValue: T,
-): [T, Dispatch<SetStateAction<T>>] {
+  initialValue: string,
+): [string, Dispatch<SetStateAction<string>>] {
   const [storedValue, setStoredValue] = useState(initialValue);
   const [firstLoadDone, setFirstLoadDone] = useState(false);
 
@@ -14,7 +14,7 @@ export default function useLocalStorage<T>(
       }
       try {
         const item = window.localStorage.getItem(key);
-        return item ? (item as T) : initialValue;
+        return item ? item : initialValue;
       } catch (error) {
         console.error(error);
         return initialValue;

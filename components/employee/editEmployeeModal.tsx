@@ -2,12 +2,13 @@ import { MenuItem, Modal, Select, Stack } from "@mui/material";
 import ModalStack from "../modalStack";
 import Button from "../button";
 import TextField from "../textField";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { Employee, EmployeeRoleName, UpdateEmployeeRequest } from "@/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import {
+  DEFAULT_EMPLOYEE_TOKEN,
   EMPLOYEE_ROLE_NAME_ADMIN,
   EMPLOYEE_ROLE_NAME_CHEF,
   EMPLOYEE_ROLE_NAME_WAITER,
@@ -20,6 +21,7 @@ import Body from "../typo/body";
 import { employeeRoleNameToEmployeeRole, employeeRoleToEmployeeRoleName } from "@/util/role";
 import { deleteEmployee, updateEmployee } from "@/services/employeeService";
 import Title from "../typo/title";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
 
 interface Props {
   employee: Employee;
@@ -40,7 +42,7 @@ export default function EditEmployeeModal({
   const [selectedRole, setSelectedRole] = useState<string>(
     employeeRoleToEmployeeRoleName(employee.role),
   );
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const token = useEmployeeToken();
 
   const onBrowseImage = () => {
     document.getElementById("image")?.click();

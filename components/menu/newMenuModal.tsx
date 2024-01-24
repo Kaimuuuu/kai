@@ -8,12 +8,11 @@ import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { CreateMenuRequest } from "@/types";
 import { createMenu } from "@/services/menuService";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
 import { uploadImage } from "@/services/imageService";
 import usePreviewImage from "@/hooks/usePreviewImage";
 import MyImage from "../image";
 import Body from "../typo/body";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
 
 interface Props {
   state: boolean;
@@ -24,7 +23,7 @@ interface Props {
 
 export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus }: Props) {
   const [imageFile, setImageFile, previewUrl] = usePreviewImage();
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const token = useEmployeeToken();
 
   const onBrowseImage = () => {
     document.getElementById("image")?.click();

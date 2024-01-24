@@ -16,6 +16,9 @@ export const EMPLOYEE_ROLE_NAME_ADMIN = "Admin";
 export const EMPLOYEE_ROLE_NAME_CHEF = "Chef";
 export const EMPLOYEE_ROLE_NAME_WAITER = "Waiter";
 
+export const DEFAULT_EMPLOYEE_TOKEN = "";
+export const DEFAULT_CLIENT_TOKEN = "";
+
 export enum StatusCode {
   OK = 200,
   CREATED = 201,

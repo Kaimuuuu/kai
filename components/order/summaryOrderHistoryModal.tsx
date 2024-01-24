@@ -4,11 +4,10 @@ import Heading from "../typo/heading";
 import { useEffect, useState } from "react";
 import { OrderStatus, SummaryOrderHistory } from "@/types";
 import { getSummaryOrderHistory } from "@/services/orderService";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import Title from "../typo/title";
 import Card from "../card";
 import Button from "../button";
-import { LOCAL_STORAGE_CLIENT_TOKEN } from "@/constants";
+import useClientToken from "@/hooks/useClientToken";
 
 interface Props {
   state: boolean;
@@ -21,7 +20,7 @@ export default function SummaryOrderHistoryModal({ state, onOpen, onClose }: Pro
     orderHistory: [],
     totalPrice: 0,
   });
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_CLIENT_TOKEN, "");
+  const token = useClientToken();
 
   useEffect(() => {
     getSummaryOrderHistory(token)

@@ -8,11 +8,11 @@ import { getEditMenu } from "@/services/menuService";
 import { EmployeeRole, Menu } from "@/types";
 import { Box, Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import useSearch from "@/hooks/useSearch";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN, LOCAL_STORAGE_ROLE } from "@/constants";
 import Button from "@/components/button";
 import NewMenuModal from "@/components/menu/newMenuModal";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
+import useRole from "@/hooks/useRole";
 
 export default function EditMenu() {
   const [menus, setMenus] = useState<Menu[]>([]);
@@ -22,13 +22,13 @@ export default function EditMenu() {
       items: menu.items.filter((item) => item.name.includes(searchQuery)),
     })),
   );
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
-  const [role, setRole] = useLocalStorage(LOCAL_STORAGE_ROLE, "-1");
+  const token = useEmployeeToken();
+  const role = useRole();
   const [newMenuModal, setNewMenuModal] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
-    getEditMenu(token, Number(role))
+    getEditMenu(token, role)
       .then((menus) => {
         setMenus(menus);
       })

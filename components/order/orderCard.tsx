@@ -6,9 +6,9 @@ import { EmployeeRole, Order, OrderStatus } from "@/types";
 import Title from "../typo/title";
 import Body from "../typo/body";
 import { updateOrderStatus } from "@/services/orderService";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN, LOCAL_STORAGE_ROLE } from "@/constants";
 import Swal from "sweetalert2";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
+import useRole from "@/hooks/useRole";
 
 interface Props {
   order: Order;
@@ -16,8 +16,8 @@ interface Props {
 }
 
 export default function OrderCard({ order, refreshOrders }: Props) {
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
-  const [role, setRole] = useLocalStorage(LOCAL_STORAGE_ROLE, "");
+  const token = useEmployeeToken();
+  const role = useRole();
 
   const onUpdate = (status: OrderStatus) => {
     Swal.fire({
@@ -70,7 +70,7 @@ export default function OrderCard({ order, refreshOrders }: Props) {
           ))}
         </Stack>
         <Body bold>{`โต๊ะที่: ${order.tableNumber}`}</Body>
-        {(Number(role) === EmployeeRole.Chef || Number(role) === EmployeeRole.Admin) && (
+        {(role === EmployeeRole.Chef || role === EmployeeRole.Admin) && (
           <>
             <Button label="สำเร็จ" onClick={() => onUpdate(OrderStatus.Success)} />
             <Button

@@ -7,12 +7,11 @@ import { getQrCode } from "@/services/qrCodeService";
 import { QrCode as QrCodeType } from "@/types";
 import { Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
 
 export default function QrCode() {
   const [qrCodes, setQrCodes] = useState<QrCodeType[]>([]);
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const token = useEmployeeToken();
   const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {

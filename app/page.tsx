@@ -9,13 +9,13 @@ import { CartItem, Menu, MenuItem } from "@/types";
 import { Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import SummaryOrderHistoryModal from "@/components/order/summaryOrderHistoryModal";
 import SummaryOrderModal from "@/components/order/summaryOrderModal";
 import useSearch from "@/hooks/useSearch";
 import Recommands from "@/components/recommands";
 import Tags from "@/components/tags";
-import { ID_MENU_CATAGORY, LOCAL_STORAGE_CLIENT_TOKEN } from "@/constants";
+import { ID_MENU_CATAGORY } from "@/constants";
+import useClientToken from "@/hooks/useClientToken";
 
 export default function Home() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -28,7 +28,7 @@ export default function Home() {
   );
   const [summaryOderModal, setSummaryOrderModal] = useState<boolean>(false);
   const [summaryOrderHistoryModal, setSummaryOrderHistoryModal] = useState<boolean>(false);
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_CLIENT_TOKEN, "");
+  const token = useClientToken();
   const [refresh, setRefresh] = useState<boolean>(false);
 
   const refreshing = () => {

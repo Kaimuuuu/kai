@@ -72,6 +72,7 @@ export interface QrCode {
 }
 
 export enum EmployeeRole {
+  Default = -1,
   Admin = 0,
   Chef,
   Waiter,

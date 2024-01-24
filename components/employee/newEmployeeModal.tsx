@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import { CreateEmployeeRequest, EmployeeRoleName } from "@/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import {
+  DEFAULT_EMPLOYEE_TOKEN,
   EMPLOYEE_ROLE_NAME_ADMIN,
   EMPLOYEE_ROLE_NAME_CHEF,
   EMPLOYEE_ROLE_NAME_WAITER,
@@ -20,6 +21,7 @@ import Body from "../typo/body";
 import { employeeRoleNameToEmployeeRole } from "@/util/role";
 import { createEmployee } from "@/services/employeeService";
 import Title from "../typo/title";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
 
 interface Props {
   state: boolean;
@@ -31,7 +33,7 @@ interface Props {
 export default function NewEmployeeModal({ state, onClose, onOpen, refreshEmployees }: Props) {
   const [imageFile, setImageFile, previewUrl] = usePreviewImage();
   const [selectedRole, setSelectedRole] = useState<string>(EMPLOYEE_ROLE_NAME_WAITER);
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const token = useEmployeeToken();
 
   const onBrowseImage = () => {
     document.getElementById("image")?.click();

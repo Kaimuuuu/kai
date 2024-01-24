@@ -7,10 +7,9 @@ import Card from "../card";
 import { CartItem } from "@/types";
 import { createOrder } from "@/services/orderService";
 import Swal from "sweetalert2";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import { useEffect, useState } from "react";
 import { getWeight } from "@/services/promotionService";
-import { LOCAL_STORAGE_CLIENT_TOKEN } from "@/constants";
+import useClientToken from "@/hooks/useClientToken";
 
 interface Props {
   state: boolean;
@@ -21,7 +20,7 @@ interface Props {
 }
 
 export default function SummaryOrderModal({ state, onOpen, onClose, cart, resetCart }: Props) {
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_CLIENT_TOKEN, "");
+  const token = useClientToken();
   const [weightLimit, setWeightLimit] = useState<number>(0);
 
   useEffect(() => {

@@ -22,6 +22,7 @@ import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { nanoSecondToHourMinute, toNanoSecond } from "@/util/duration";
 import {
+  DEFAULT_EMPLOYEE_TOKEN,
   LOCAL_STORAGE_EMPLOYEE_TOKEN,
   SELECT_LABEL_PROMOTION_MENU_ITEM_ALACARTE,
   SELECT_LABEL_PROMOTION_MENU_ITEM_BUFFET,
@@ -33,6 +34,7 @@ import usePreviewImage from "@/hooks/usePreviewImage";
 import { uploadImage } from "@/services/imageService";
 import MyImage from "../image";
 import Body from "../typo/body";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
 
 interface Props {
   promotion: Promotion;
@@ -58,7 +60,7 @@ export default function EditPromotionModal({
         promotionMenuItem.menuItem.name.includes(searchQuery),
       ),
   );
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const token = useEmployeeToken();
   const [noLimitTime, setNoLimitTime] = useState<boolean>(false);
   const [imageFile, setImageFile, previewUrl] = usePreviewImage();
 

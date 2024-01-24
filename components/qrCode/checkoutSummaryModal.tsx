@@ -3,16 +3,15 @@ import ModalStack from "../modalStack";
 import Heading from "../typo/heading";
 import SubHeading from "../typo/subHeading";
 import Body from "../typo/body";
-import { durationSince, nanoSecondToHourMinute } from "@/util/duration";
+import { nanoSecondToHourMinute } from "@/util/duration";
 import Title from "../typo/title";
 import Card from "../card";
 import Button from "../button";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import { useEffect, useState } from "react";
 import { CheckoutSummaryObject } from "@/types";
 import { checkout, getCheckoutSummary } from "@/services/qrCodeService";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
 import Swal from "sweetalert2";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
 
 interface Props {
   state: boolean;
@@ -29,7 +28,7 @@ export default function CheckoutSummaryModal({
   clientToken,
   refreshQrCodes,
 }: Props) {
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const token = useEmployeeToken();
   const [checkoutSummary, setCheckoutSummary] = useState<CheckoutSummaryObject>({
     tableNumber: 0,
     size: 0,

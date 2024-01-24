@@ -7,8 +7,7 @@ import { generateQrCode } from "@/services/promotionService";
 import Swal from "sweetalert2";
 import { Promotion } from "@/types";
 import ModalStack from "../modalStack";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import { LOCAL_STORAGE_EMPLOYEE_TOKEN } from "@/constants";
+import useEmployeeToken from "@/hooks/useEmployeeToken";
 
 interface Props {
   promotion: Promotion;
@@ -18,7 +17,7 @@ interface Props {
 }
 
 export default function GenerateQrCodeModal({ promotion, state, onOpen, onClose }: Props) {
-  const [token, setToken] = useLocalStorage(LOCAL_STORAGE_EMPLOYEE_TOKEN, "");
+  const token = useEmployeeToken();
 
   const formik = useFormik({
     initialValues: {

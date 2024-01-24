@@ -3,6 +3,7 @@ This repository contains the frontend code of the project. The corresponding bac
 The backend repository contains all of the necessary code to build and run the API for the project. It is built using Golang and is accessed by the frontend through API calls.
 
 # Project Overview
+
 This project is a platform that allows the 'client' to view the menu and order food, while the 'admin,' 'chef,' and 'waiter' can interact with the system depending on the use cases.
 
 The following use cases are available to users:
@@ -40,7 +41,6 @@ Admin:
 - Update order status (success or declined).
 - View the list of QR Codes.
 - Checkout.
-
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
