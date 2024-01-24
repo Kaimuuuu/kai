@@ -5,7 +5,7 @@ import Button from "../button";
 import { Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { LOCAL_STORAGE_ROLE } from "@/constants";
+import { LOCAL_STORAGE_EMPLOYEE_TOKEN, LOCAL_STORAGE_ROLE } from "@/constants";
 
 export default function Navbar() {
   const [navbarItems, setNavItems] = useState<NavItem[]>([]);
@@ -17,6 +17,13 @@ export default function Navbar() {
     setNavItems(navbarItems);
   }, [role]);
 
+  const onLogout = () => {
+    localStorage.removeItem(LOCAL_STORAGE_EMPLOYEE_TOKEN)
+    localStorage.removeItem(LOCAL_STORAGE_ROLE)
+
+    router.push("/login")
+  }
+
   return (
     <Stack spacing={"10px"} marginBottom={"20px"}>
       {navbarItems.map((navbatItem) => (
@@ -26,7 +33,7 @@ export default function Navbar() {
           onClick={() => router.push(navbatItem.path)}
         />
       ))}
-      <Button label={"ออกจากระบบ"} myVariant="danger" onClick={() => router.push("/login")} />
+      <Button label={"ออกจากระบบ"} myVariant="danger" onClick={onLogout} />
     </Stack>
   );
 }
