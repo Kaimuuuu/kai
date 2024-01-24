@@ -58,7 +58,6 @@ export interface Promotion {
   price: number;
   editable: boolean;
   imagePath: string;
-  menuItemIdList: string[];
 }
 
 export interface QrCode {

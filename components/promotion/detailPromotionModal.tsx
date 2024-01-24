@@ -42,7 +42,7 @@ export default function DetailPromotionModal({ promotion, state, onOpen, onClose
     getPromotionMenuItems(token, promotion.id)
       .then((promotionMenuItems) => setPromotionMenuItems(promotionMenuItems))
       .catch((err) => console.log(err));
-  }, [token]);
+  }, [token, state]);
 
   const hourMinute = nanoSecondToHourMinute(promotion.duration);
 

@@ -71,7 +71,7 @@ export default function EditPromotionModal({
         setPromotionMenuItems(promotionMenuItems);
       })
       .catch((err) => console.log(err));
-  }, [token]);
+  }, [token, state]);
 
   const filteredPromotionMenuItemsType = filterdPromotionMenuItems.filter((promotionMenuItem) =>
     selectedFilterer !== -1 ? promotionMenuItem.type === selectedFilterer : promotionMenuItem,
