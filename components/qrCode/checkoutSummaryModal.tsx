@@ -48,7 +48,6 @@ export default function CheckoutSummaryModal({
   }, [token, state]);
 
   const onCheckout = () => {
-    onClose();
     checkout(clientToken, token)
       .then(() => {
         refreshQrCodes();

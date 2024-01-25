@@ -15,6 +15,7 @@ export async function getMenu(token: string): Promise<Menu[]> {
       Authorization: `Bearer ${token}`,
     },
   });
+
   const menuItems: MenuItem[] = await res.json();
 
   return menuItemsToMenuList(menuItems);

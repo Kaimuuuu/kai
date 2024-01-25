@@ -17,6 +17,8 @@ import Tags from "@/components/tags";
 import { ID_MENU_CATAGORY } from "@/constants";
 import useClientToken from "@/hooks/useClientToken";
 import Loading from "@/components/loading";
+import { meClient } from "@/services/authService";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -32,6 +34,7 @@ export default function Home() {
   const token = useClientToken();
   const [refresh, setRefresh] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   const refreshing = () => {
     setRefresh(!refresh);
@@ -39,6 +42,10 @@ export default function Home() {
 
   useEffect(() => {
     if (token) {
+      meClient(token).catch((err) => {
+        router.push("/error/client-token");
+      });
+
       getMenu(token)
         .then((menus) => {
           setMenus(menus);

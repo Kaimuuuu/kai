@@ -12,6 +12,8 @@ import NewPromotionModal from "@/components/promotion/newPromotionModal";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
 import useRole from "@/hooks/useRole";
 import Loading from "@/components/loading";
+import { useRouter } from "next/navigation";
+import { me } from "@/services/authService";
 
 export default function Promotion() {
   const [promotions, setPromotions] = useState<PromotionType[]>([]);
@@ -20,9 +22,14 @@ export default function Promotion() {
   const role = useRole();
   const [refresh, setRefresh] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   useEffect(() => {
     if (token) {
+      me(token).catch((err) => {
+        router.push("/login");
+      });
+
       getPromotions(token, role)
         .then((promotions) => {
           setPromotions(promotions);

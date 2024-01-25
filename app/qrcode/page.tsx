@@ -9,15 +9,22 @@ import { Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
 import Loading from "@/components/loading";
+import { me } from "@/services/authService";
+import { useRouter } from "next/navigation";
 
 export default function QrCode() {
   const [qrCodes, setQrCodes] = useState<QrCodeType[]>([]);
   const token = useEmployeeToken();
   const [refresh, setRefresh] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   useEffect(() => {
     if (token) {
+      me(token).catch((err) => {
+        router.push("/login");
+      });
+
       getQrCode(token)
         .then((qrCodesCard) => {
           setQrCodes(qrCodesCard);

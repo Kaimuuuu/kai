@@ -13,6 +13,8 @@ import NewEmployeeModal from "@/components/employee/newEmployeeModal";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
 import useRole from "@/hooks/useRole";
 import Loading from "@/components/loading";
+import { useRouter } from "next/navigation";
+import { me } from "@/services/authService";
 
 export default function EditMenu() {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -24,9 +26,14 @@ export default function EditMenu() {
   const [newEmployeeModal, setNewEmployeeModal] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   useEffect(() => {
     if (token) {
+      me(token).catch((err) => {
+        router.push("/login");
+      });
+
       getEmployees(token, role)
         .then((menus) => {
           setEmployees(menus);
