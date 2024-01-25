@@ -46,7 +46,9 @@ export default function Home() {
         })
         .catch((err) => console.log(err));
     }
+  }, [token, refresh]);
 
+  useEffect(() => {
     if (!isLoading) {
       const pollingId = setInterval(() => {
         refreshing();
@@ -54,7 +56,7 @@ export default function Home() {
 
       return () => clearInterval(pollingId);
     }
-  }, [token, refresh]);
+  }, [refresh, isLoading])
 
   const tags = menus.map((menu) => menu.catagory);
 

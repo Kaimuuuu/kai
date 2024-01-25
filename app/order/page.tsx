@@ -25,7 +25,9 @@ export default function Order() {
         })
         .catch((err) => console.log(err));
     }
+  }, [token, refresh]);
 
+  useEffect(() => {
     if (!isLoading) {
       const pollingId = setInterval(() => {
         refreshing();
@@ -33,7 +35,7 @@ export default function Order() {
 
       return () => clearInterval(pollingId);
     }
-  }, [token, refresh]);
+  }, [refresh, isLoading])
 
   const refreshing = () => {
     setRefresh(!refresh);

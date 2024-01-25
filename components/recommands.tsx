@@ -24,18 +24,17 @@ export default function Recommands() {
         })
         .catch((err) => console.log(err));
     }
+  }, [token, refresh]);
 
+  useEffect(() => {
     if (!isLoading) {
-      const pollingId = setInterval(
-        () => {
-          refreshing();
-        },
-        15 * 60 * 1e3,
-      );
+      const pollingId = setInterval(() => {
+        refreshing();
+      }, 5 * 1e3);
 
       return () => clearInterval(pollingId);
     }
-  }, [token, refresh]);
+  }, [refresh, isLoading])
 
   return (
     <Box
