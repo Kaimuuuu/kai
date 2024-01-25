@@ -13,6 +13,7 @@ import Button from "@/components/button";
 import NewMenuModal from "@/components/menu/newMenuModal";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
 import useRole from "@/hooks/useRole";
+import Loading from "@/components/loading";
 
 export default function EditMenu() {
   const [menus, setMenus] = useState<Menu[]>([]);
@@ -26,12 +27,14 @@ export default function EditMenu() {
   const role = useRole();
   const [newMenuModal, setNewMenuModal] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (token) {
       getEditMenu(token, role)
         .then((menus) => {
           setMenus(menus);
+          setIsLoading(false);
         })
         .catch((err) => console.log(err));
     }
@@ -41,6 +44,10 @@ export default function EditMenu() {
   const onCloseNewMenuModal = () => setNewMenuModal(false);
 
   const refreshing = () => setRefresh(!refresh);
+
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
     <main

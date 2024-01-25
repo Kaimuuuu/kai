@@ -12,6 +12,7 @@ import EmployeeCard from "@/components/employee/employeeCard";
 import NewEmployeeModal from "@/components/employee/newEmployeeModal";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
 import useRole from "@/hooks/useRole";
+import Loading from "@/components/loading";
 
 export default function EditMenu() {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -22,12 +23,14 @@ export default function EditMenu() {
   const role = useRole();
   const [newEmployeeModal, setNewEmployeeModal] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (token) {
       getEmployees(token, role)
         .then((menus) => {
           setEmployees(menus);
+          setIsLoading(false);
         })
         .catch((err) => console.log(err));
     }
@@ -37,6 +40,10 @@ export default function EditMenu() {
   const onCloseNewEmployeeModal = () => setNewEmployeeModal(false);
 
   const refreshing = () => setRefresh(!refresh);
+
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
     <main

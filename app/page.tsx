@@ -16,6 +16,7 @@ import Recommands from "@/components/recommands";
 import Tags from "@/components/tags";
 import { ID_MENU_CATAGORY } from "@/constants";
 import useClientToken from "@/hooks/useClientToken";
+import Loading from "@/components/loading";
 
 export default function Home() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -114,6 +115,10 @@ export default function Home() {
 
   const onOpenSummaryOrderModal = () => setSummaryOrderModal(true);
   const onCloseSummaryOrderModal = () => setSummaryOrderModal(false);
+
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
     <main

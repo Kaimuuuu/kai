@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import NewPromotionModal from "@/components/promotion/newPromotionModal";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
 import useRole from "@/hooks/useRole";
+import Loading from "@/components/loading";
 
 export default function Promotion() {
   const [promotions, setPromotions] = useState<PromotionType[]>([]);
@@ -18,11 +19,15 @@ export default function Promotion() {
   const token = useEmployeeToken();
   const role = useRole();
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (token) {
       getPromotions(token, role)
-        .then((promotions) => setPromotions(promotions))
+        .then((promotions) => {
+          setPromotions(promotions);
+          setIsLoading(false);
+        })
         .catch((err) => console.log(err));
     }
   }, [token, refresh]);
@@ -31,6 +36,10 @@ export default function Promotion() {
   const onCloseNewPromotionModal = () => setNewPromotionModal(false);
 
   const refreshing = () => setRefresh(!refresh);
+
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
     <main

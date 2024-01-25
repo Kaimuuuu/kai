@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "@/components/layout/navbar";
+import Loading from "@/components/loading";
 import OrderCard from "@/components/order/orderCard";
 import Heading from "@/components/typo/heading";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
@@ -20,6 +21,7 @@ export default function Order() {
       getOrder(token)
         .then((orders) => {
           setOrders(orders);
+          setIsLoading(false);
         })
         .catch((err) => console.log(err));
     }
@@ -36,6 +38,10 @@ export default function Order() {
   const refreshing = () => {
     setRefresh(!refresh);
   };
+
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
     <main
