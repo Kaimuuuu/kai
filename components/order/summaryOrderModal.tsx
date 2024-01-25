@@ -33,6 +33,17 @@ export default function SummaryOrderModal({ state, onOpen, onClose, cart, resetC
 
   const onClickOrder = () => {
     onClose();
+
+    if (!cart.length) {
+      Swal.fire({
+        title: "สั่งอาหารล้มเหลว",
+        text: "กรุณาเลือกอาหารที่ต้องการสั่ง (ตะกร้าว่างเปล่า)",
+        icon: "error",
+        confirmButtonAriaLabel: "ตกลง",
+      });
+      return;
+    }
+
     createOrder(token, cart)
       .then(() => {
         Swal.fire({
