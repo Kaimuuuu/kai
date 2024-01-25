@@ -64,6 +64,7 @@ export default function NewEmployeeModal({ state, onClose, onOpen, refreshEmploy
       };
       createEmployee(token, req)
         .then((generatedPassword: string) => {
+          formik.resetForm();
           refreshEmployees();
           Swal.fire({
             title: "เพิ่มพนักงานสำเร็จ",

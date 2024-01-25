@@ -61,6 +61,7 @@ export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus 
       };
       createMenu(token, req)
         .then(() => {
+          formik.resetForm();
           refreshEditMenus();
           Swal.fire({
             title: "สร้างเมนูสำเร็จ",

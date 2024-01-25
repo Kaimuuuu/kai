@@ -112,6 +112,7 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
       };
       createPromotion(token, req)
         .then(() => {
+          formik.resetForm();
           refreshPromotions();
           Swal.fire({
             title: "สร้างโปรโมชั่นสำเร็จ",

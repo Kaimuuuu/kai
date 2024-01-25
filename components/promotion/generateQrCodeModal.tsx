@@ -28,6 +28,7 @@ export default function GenerateQrCodeModal({ promotion, state, onOpen, onClose 
       onClose();
       generateQrCode(token, promotion.id, values.tableNumber, values.size)
         .then((token) => {
+          formik.resetForm();
           Swal.fire({
             imageUrl: `${process.env.BACKEND_URL}/qrcode/${token}`,
             imageWidth: 300,

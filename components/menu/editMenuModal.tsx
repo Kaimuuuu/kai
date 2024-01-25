@@ -54,6 +54,7 @@ export default function EditMenuModal({
       if (result.isConfirmed) {
         deleteMenu(token, menuItem.id)
           .then(() => {
+            formik.resetForm();
             refreshEditMenus();
             Swal.fire({
               title: "ลบเมนูสำเร็จ",
@@ -98,6 +99,7 @@ export default function EditMenuModal({
       };
       updateMenu(token, req, menuItem.id)
         .then(() => {
+          formik.resetForm();
           refreshEditMenus();
           Swal.fire({
             title: "แก้ไขเมนูสำเร็จ",

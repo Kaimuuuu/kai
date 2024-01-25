@@ -129,6 +129,7 @@ export default function EditPromotionModal({
       };
       updatePromotion(token, req, promotion.id)
         .then(() => {
+          formik.resetForm();
           refreshPromotions();
           Swal.fire({
             title: "แก้ไขโปรโมชั่นสำเร็จ",

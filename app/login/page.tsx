@@ -19,6 +19,7 @@ export default function Login() {
     onSubmit: async (values) => {
       login(values.email, values.password)
         .then(() => {
+          formik.resetForm();
           router.push("/edit");
         })
         .catch((err: Error) => {
