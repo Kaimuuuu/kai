@@ -45,7 +45,7 @@ export default function CheckoutSummaryModal({
         .then((summary) => setCheckoutSummary(summary))
         .catch((err) => console.log(err));
     }
-  }, [token]);
+  }, [token, state]);
 
   const onCheckout = () => {
     onClose();
