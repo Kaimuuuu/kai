@@ -56,7 +56,7 @@ export default function Home() {
 
       return () => clearInterval(pollingId);
     }
-  }, [refresh, isLoading])
+  }, [refresh, isLoading]);
 
   const tags = menus.map((menu) => menu.catagory);
 
@@ -119,7 +119,7 @@ export default function Home() {
   const onCloseSummaryOrderModal = () => setSummaryOrderModal(false);
 
   if (isLoading) {
-    return <Loading />
+    return <Loading />;
   }
 
   return (

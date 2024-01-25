@@ -35,14 +35,14 @@ export default function Order() {
 
       return () => clearInterval(pollingId);
     }
-  }, [refresh, isLoading])
+  }, [refresh, isLoading]);
 
   const refreshing = () => {
     setRefresh(!refresh);
   };
 
   if (isLoading) {
-    return <Loading />
+    return <Loading />;
   }
 
   return (

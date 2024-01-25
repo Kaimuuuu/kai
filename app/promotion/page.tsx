@@ -38,7 +38,7 @@ export default function Promotion() {
   const refreshing = () => setRefresh(!refresh);
 
   if (isLoading) {
-    return <Loading />
+    return <Loading />;
   }
 
   return (

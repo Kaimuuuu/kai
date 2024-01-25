@@ -34,7 +34,7 @@ export default function Recommands() {
 
       return () => clearInterval(pollingId);
     }
-  }, [refresh, isLoading])
+  }, [refresh, isLoading]);
 
   return (
     <Box

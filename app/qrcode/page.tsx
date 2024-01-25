@@ -32,7 +32,7 @@ export default function QrCode() {
   };
 
   if (isLoading) {
-    return <Loading />
+    return <Loading />;
   }
 
   return (

@@ -48,7 +48,7 @@ export async function getSummaryOrderHistory(token: string): Promise<SummaryOrde
     throw new Error(err.errMessage);
   }
 
-  let data: Order[] = await res.json() ?? [];
+  let data: Order[] = (await res.json()) ?? [];
 
   let total = 0;
   data

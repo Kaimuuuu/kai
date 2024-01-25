@@ -42,7 +42,7 @@ export default function EditMenu() {
   const refreshing = () => setRefresh(!refresh);
 
   if (isLoading) {
-    return <Loading />
+    return <Loading />;
   }
 
   return (
