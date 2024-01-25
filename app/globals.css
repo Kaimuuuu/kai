@@ -51,7 +51,7 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background-color: "#FAFAFA";
+  background-color: #FAFAFA;
   min-height: 100vh;
 }
 
