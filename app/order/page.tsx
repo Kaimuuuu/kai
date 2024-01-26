@@ -70,6 +70,7 @@ export default function Order() {
     }).then((result) => {
       if (result.isConfirmed) {
         setChangedOrderItems([]);
+        refreshing();
         if (!changedOrderItems.length) {
           Swal.fire({
             title: "อัพเดจสถานะคำสั่งอาหารสำเร็จ",

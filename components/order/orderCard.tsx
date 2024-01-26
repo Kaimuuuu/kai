@@ -75,6 +75,8 @@ export default function OrderCard({
     });
   };
 
+  console.log(changedOrderItems)
+
   const onClickCheckbox = (item: OrderItem) => {
     item.isComplete = !item.isComplete;
     setOrderItems([...orderItems]);
@@ -84,9 +86,9 @@ export default function OrderCard({
       menuItemId: item.menuItemId,
       status: item.isComplete,
     };
-    const find = changedOrderItems.find((item) => item.orderId === req.orderId);
+    const find = changedOrderItems.find((item) => item.orderId === req.orderId && item.menuItemId === req.menuItemId);
     if (find) {
-      const filtered = changedOrderItems.filter((item) => item.orderId !== req.orderId);
+      const filtered = changedOrderItems.filter((item) => item.orderId !== req.orderId || item.menuItemId !== req.menuItemId);
       setChangedOrderItems(filtered);
     } else {
       setChangedOrderItems([...changedOrderItems, req]);
