@@ -7,8 +7,6 @@ import Card from "../card";
 import { CartItem } from "@/types";
 import { createOrder } from "@/services/orderService";
 import Swal from "sweetalert2";
-import { useEffect, useState } from "react";
-import { getWeight } from "@/services/promotionService";
 import useClientToken from "@/hooks/useClientToken";
 
 interface Props {
@@ -21,15 +19,6 @@ interface Props {
 
 export default function SummaryOrderModal({ state, onOpen, onClose, cart, resetCart }: Props) {
   const token = useClientToken();
-  const [weightLimit, setWeightLimit] = useState<number>(0);
-
-  useEffect(() => {
-    if (token) {
-      getWeight(token)
-        .then((weight) => setWeightLimit(weight))
-        .catch((err) => console.log(err));
-    }
-  }, [token]);
 
   const onClickOrder = () => {
     onClose();
@@ -87,12 +76,7 @@ export default function SummaryOrderModal({ state, onOpen, onClose, cart, resetC
             )}
           </Stack>
           <Stack direction={"row"} padding={1} bgcolor={"#E6E6E5"} borderRadius={"10px"}>
-            <Box marginRight={"auto"}>
-              <Card
-                label={`น้ำหนัก: ${cart.reduce((accu, cartItem) => accu + cartItem.weight * cartItem.quantity, 0)}/${weightLimit}`}
-              />
-            </Box>
-            <Box>
+            <Box marginLeft="auto">
               <Card
                 label={`ราคารวม: ${cart.reduce((accu, cartItem) => accu + cartItem.price * cartItem.quantity, 0)}฿`}
                 bgcolor="#D12600"

@@ -25,11 +25,15 @@ export default function Promotion() {
   const router = useRouter();
 
   useEffect(() => {
-    if (token) {
+    if (token && isLoading) {
       me(token).catch((err) => {
         router.push("/login");
       });
+    }
+  }, [token, isLoading]);
 
+  useEffect(() => {
+    if (token) {
       getPromotions(token, role)
         .then((promotions) => {
           setPromotions(promotions);
@@ -65,7 +69,7 @@ export default function Promotion() {
           {promotions.map((promotion) => (
             <PromotionCard
               promotion={promotion}
-              key={promotion.name}
+              key={promotion.id}
               refreshPromotions={refreshing}
             />
           ))}

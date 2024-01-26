@@ -8,6 +8,7 @@ import Title from "../typo/title";
 import Card from "../card";
 import Button from "../button";
 import useClientToken from "@/hooks/useClientToken";
+import Checkbox from "../checkbox";
 
 interface Props {
   state: boolean;
@@ -47,7 +48,8 @@ export default function SummaryOrderHistoryModal({ state, onOpen, onClose }: Pro
                   spacing={"10px"}
                 >
                   {order.orderItems.map((item) => (
-                    <Stack direction={"row"} key={item.name}>
+                    <Stack direction={"row"} key={item.name} alignItems={"center"}>
+                      <Checkbox checked={item.isComplete} />
                       <Title>{item.name}</Title>
                       <Stack marginLeft={"auto"} direction={"row"} spacing={"4px"}>
                         {item.outOfStock && <Card label={`หมด`} bgcolor="#000000" />}

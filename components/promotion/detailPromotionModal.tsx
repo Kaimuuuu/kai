@@ -5,12 +5,10 @@ import Title from "../typo/title";
 import Button from "../button";
 import { Promotion, PromotionMenuItem, PromotionMenuItemType } from "@/types";
 import { useEffect, useState } from "react";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import TextArea from "../textArea";
 import { getPromotionMenuItems } from "@/services/promotionService";
 import { nanoSecondToHourMinute } from "@/util/duration";
 import {
-  LOCAL_STORAGE_EMPLOYEE_TOKEN,
   SELECT_LABEL_PROMOTION_MENU_ITEM_ALACARTE,
   SELECT_LABEL_PROMOTION_MENU_ITEM_BUFFET,
   SELECT_LABEL_PROMOTION_MENU_ITEM_DEFAULT,
@@ -74,7 +72,6 @@ export default function DetailPromotionModal({ promotion, state, onOpen, onClose
             <Stack spacing={"10px"} width={"100%"}>
               <TextField label="ชื่อโปรโมชั่น" value={promotion.name} />
               <Stack direction={"row"} spacing={"10px"}>
-                <TextField label="น้ำหนักสุทธิ" value={promotion.weight} />
                 <TextField label="ราคาเริ่มต้น" value={promotion.price} />
               </Stack>
               <Stack direction={"row"} alignItems={"center"} spacing={"4px"}>

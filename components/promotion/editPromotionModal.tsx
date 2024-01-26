@@ -11,7 +11,6 @@ import {
   UpdatePromotionRequest,
 } from "@/types";
 import { ChangeEvent, useEffect, useState } from "react";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import TextArea from "../textArea";
 import {
   deletePromotion,
@@ -22,8 +21,6 @@ import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { nanoSecondToHourMinute, toNanoSecond } from "@/util/duration";
 import {
-  DEFAULT_EMPLOYEE_TOKEN,
-  LOCAL_STORAGE_EMPLOYEE_TOKEN,
   SELECT_LABEL_PROMOTION_MENU_ITEM_ALACARTE,
   SELECT_LABEL_PROMOTION_MENU_ITEM_BUFFET,
   SELECT_LABEL_PROMOTION_MENU_ITEM_DEFAULT,
@@ -96,7 +93,6 @@ export default function EditPromotionModal({
   const formik = useFormik({
     initialValues: {
       name: promotion.name,
-      weight: promotion.weight,
       price: promotion.price,
       hours: HoursMinutes.hours,
       minutes: HoursMinutes.minutes,
@@ -111,7 +107,6 @@ export default function EditPromotionModal({
 
       const req: UpdatePromotionRequest = {
         name: values.name,
-        weight: values.weight,
         price: Number(values.price),
         imagePath: imagePath,
         duration: Number(
@@ -212,15 +207,6 @@ export default function EditPromotionModal({
                 required
               />
               <Stack direction={"row"} spacing={"10px"}>
-                <TextField
-                  label="น้ำหนักสุทธิ"
-                  name="weight"
-                  onChange={formik.handleChange}
-                  value={formik.values.weight}
-                  type="number"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  required
-                />
                 <TextField
                   label="ราคาเริ่มต้น"
                   name="price"

@@ -42,9 +42,11 @@ export default function Home() {
 
   useEffect(() => {
     if (token) {
-      meClient(token).catch((err) => {
-        router.push("/error/client-token");
-      });
+      if (isLoading) {
+        meClient(token).catch((err) => {
+          router.push("/error/client-token");
+        });
+      }
 
       getMenu(token)
         .then((menus) => {
@@ -79,7 +81,6 @@ export default function Home() {
         name: menuItem.name,
         quantity: 1,
         price: menuItem.price,
-        weight: menuItem.weight,
       };
 
       setCart([...cart, newCartItem]);

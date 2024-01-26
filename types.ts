@@ -7,7 +7,6 @@ export interface MenuItem {
   id: string;
   name: string;
   catagory: string;
-  weight: number;
   description: string;
   price: number;
   outOfStock: boolean;
@@ -20,7 +19,6 @@ export interface CartItem {
   name: string;
   quantity: number;
   price: number;
-  weight: number;
 }
 
 export interface SummaryOrderHistory {
@@ -43,17 +41,18 @@ export interface Order {
 }
 
 export interface OrderItem {
+  menuItemId: string;
   name: string;
   outOfStock: boolean;
   quantity: number;
   price: number;
+  isComplete: boolean;
 }
 
 export interface Promotion {
   id: string;
   name: string;
   description: string;
-  weight: number;
   duration: number;
   price: number;
   editable: boolean;
@@ -106,7 +105,6 @@ export interface CheckoutSummaryObject {
 
 export interface CreatePromotionRequest {
   name: string;
-  weight: number;
   price: number;
   imagePath: string;
   duration: number;
@@ -116,7 +114,6 @@ export interface CreatePromotionRequest {
 
 export interface UpdatePromotionRequest {
   name: string;
-  weight: number;
   price: number;
   imagePath: string;
   duration: number;
@@ -127,7 +124,6 @@ export interface UpdatePromotionRequest {
 export interface CreateMenuRequest {
   name: string;
   catagory: string;
-  weight: number;
   description: string;
   outOfStock: boolean;
   price: number;
@@ -137,7 +133,6 @@ export interface CreateMenuRequest {
 export interface UpdateMenuRequest {
   name: string;
   catagory: string;
-  weight: number;
   description: string;
   price: number;
   imagePath: string;
@@ -175,4 +170,15 @@ export interface UpdateEmployeeRequest {
 
 export interface ErrorResponse {
   errMessage: string;
+}
+
+export interface UpdateOrderItemStatus {
+  orderId: string;
+  menuItemId: string;
+  status: boolean;
+}
+
+export interface UpdateOrderItemStatusRequest {
+  menuItemId: string;
+  status: boolean;
 }

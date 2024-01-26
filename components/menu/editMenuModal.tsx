@@ -78,7 +78,6 @@ export default function EditMenuModal({
     initialValues: {
       name: menuItem.name,
       catagory: menuItem.catagory,
-      weight: menuItem.weight,
       description: menuItem.description,
       price: menuItem.price,
     },
@@ -92,7 +91,6 @@ export default function EditMenuModal({
       const req: UpdateMenuRequest = {
         name: values.name,
         catagory: values.catagory,
-        weight: Number(values.weight),
         description: values.description,
         price: Number(values.price),
         imagePath: imagePath,
@@ -159,10 +157,10 @@ export default function EditMenuModal({
                   required
                 />
                 <TextField
-                  label="น้ำหนัก"
-                  name="weight"
+                  label="ราคา"
+                  name="price"
                   onChange={formik.handleChange}
-                  value={formik.values.weight}
+                  value={formik.values.price}
                   required
                   type="number"
                   InputProps={{ inputProps: { min: 0 } }}
@@ -173,15 +171,6 @@ export default function EditMenuModal({
                 name="description"
                 onChange={formik.handleChange}
                 value={formik.values.description}
-              />
-              <TextField
-                label="ราคา"
-                name="price"
-                onChange={formik.handleChange}
-                value={formik.values.price}
-                required
-                type="number"
-                InputProps={{ inputProps: { min: 0 } }}
               />
             </Stack>
           </Stack>

@@ -29,11 +29,15 @@ export default function EditMenu() {
   const router = useRouter();
 
   useEffect(() => {
-    if (token) {
+    if (token && isLoading) {
       me(token).catch((err) => {
         router.push("/login");
       });
+    }
+  }, [token, isLoading]);
 
+  useEffect(() => {
+    if (token) {
       getEmployees(token, role)
         .then((menus) => {
           setEmployees(menus);

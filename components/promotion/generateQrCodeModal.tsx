@@ -3,11 +3,11 @@ import Heading from "../typo/heading";
 import TextField from "../textField";
 import Button from "../button";
 import { useFormik } from "formik";
-import { generateQrCode } from "@/services/promotionService";
 import Swal from "sweetalert2";
 import { Promotion } from "@/types";
 import ModalStack from "../modalStack";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
+import { generateQrCode } from "@/services/qrCodeService";
 
 interface Props {
   promotion: Promotion;
@@ -49,17 +49,31 @@ export default function GenerateQrCodeModal({ promotion, state, onOpen, onClose 
 
   return (
     <Modal open={state} onClose={onClose}>
-      <Box>
+      <form onSubmit={formik.handleSubmit}>
         <ModalStack>
           <Heading>{`โปรโมชั่น: ${promotion.name}`}</Heading>
           <Stack spacing={"10px"} direction={"row"}>
-            <TextField label="โต๊ะที่" name="tableNumber" onChange={formik.handleChange} />
-            <TextField label="จำนวนคน" name="size" onChange={formik.handleChange} />
+            <TextField
+              label="โต๊ะที่"
+              name="tableNumber"
+              onChange={formik.handleChange}
+              type="number"
+              required
+              InputProps={{ inputProps: { min: 1 } }}
+            />
+            <TextField
+              label="จำนวนคน"
+              name="size"
+              onChange={formik.handleChange}
+              type="number"
+              required
+              InputProps={{ inputProps: { min: 1 } }}
+            />
           </Stack>
-          <Button label="สร้าง Qr Code" onClick={formik.submitForm} />
+          <Button label="สร้าง Qr Code" type="submit" />
           <Button label="ยกเลิก" myVariant="secondary" onClick={onClose} />
         </ModalStack>
-      </Box>
+      </form>
     </Modal>
   );
 }

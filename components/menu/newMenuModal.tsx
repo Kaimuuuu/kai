@@ -39,7 +39,6 @@ export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus 
     initialValues: {
       name: "",
       catagory: "",
-      weight: "",
       description: "",
       price: "",
     },
@@ -53,7 +52,6 @@ export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus 
       const req: CreateMenuRequest = {
         name: values.name,
         catagory: values.catagory,
-        weight: Number(values.weight),
         description: values.description,
         price: Number(values.price),
         imagePath: imagePath,
@@ -116,8 +114,8 @@ export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus 
                   required
                 />
                 <TextField
-                  label="น้ำหนัก"
-                  name="weight"
+                  label="ราคา"
+                  name="price"
                   onChange={formik.handleChange}
                   required
                   type="number"
@@ -125,14 +123,6 @@ export default function NewMenuModal({ state, onClose, onOpen, refreshEditMenus 
                 />
               </Stack>
               <TextArea label="คำอธิบาย" name="description" onChange={formik.handleChange} />
-              <TextField
-                label="ราคา"
-                name="price"
-                onChange={formik.handleChange}
-                required
-                type="number"
-                InputProps={{ inputProps: { min: 0 } }}
-              />
             </Stack>
           </Stack>
           <Button label="เพิ่มเมนูอาหาร" type="submit" />

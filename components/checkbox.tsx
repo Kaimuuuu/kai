@@ -1,12 +1,6 @@
-import { Checkbox as MuiCheckbox } from "@mui/material";
+import { CheckboxProps, Checkbox as MuiCheckbox } from "@mui/material";
 
-interface Props {
-  checked?: boolean;
-  disabled?: boolean;
-  onClick?: () => void;
-}
-
-export default function Checkbox({ checked, disabled, onClick }: Props) {
+export default function Checkbox({ ...props }: CheckboxProps) {
   return (
     <MuiCheckbox
       sx={{
@@ -15,9 +9,7 @@ export default function Checkbox({ checked, disabled, onClick }: Props) {
         "&.Mui-checked": { color: "#FF6D4D" },
         "&.Mui-disabled": { color: "#FF6D4D" },
       }}
-      onClick={onClick}
-      checked={checked}
-      disabled={disabled}
+      {...props}
     />
   );
 }

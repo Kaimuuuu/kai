@@ -9,9 +9,9 @@ import Card from "../card";
 import Button from "../button";
 import { useEffect, useState } from "react";
 import { CheckoutSummaryObject } from "@/types";
-import { checkout, getCheckoutSummary } from "@/services/qrCodeService";
 import Swal from "sweetalert2";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
+import { checkout, getCheckoutSummary } from "@/services/transactionService";
 
 interface Props {
   state: boolean;

@@ -6,16 +6,12 @@ import IOSSwitch from "../switch";
 import Button from "../button";
 import { CreatePromotionRequest, PromotionMenuItem, PromotionMenuItemType } from "@/types";
 import { ChangeEvent, useEffect, useState } from "react";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import TextArea from "../textArea";
 import { createPromotion, getAllPromotionMenuItems } from "@/services/promotionService";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { toNanoSecond } from "@/util/duration";
 import {
-  DEFAULT_EMPLOYEE_TOKEN,
-  LOCAL_STORAGE_EMPLOYEE_TOKEN,
-  LOCAL_STORAGE_ROLE,
   SELECT_LABEL_PROMOTION_MENU_ITEM_ALACARTE,
   SELECT_LABEL_PROMOTION_MENU_ITEM_BUFFET,
   SELECT_LABEL_PROMOTION_MENU_ITEM_DEFAULT,
@@ -79,7 +75,6 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
   const formik = useFormik({
     initialValues: {
       name: "",
-      weight: "",
       price: "",
       hours: "",
       minutes: "",
@@ -94,7 +89,6 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
 
       const req: CreatePromotionRequest = {
         name: values.name,
-        weight: Number(values.weight),
         price: Number(values.price),
         imagePath: imagePath,
         duration: Number(
@@ -161,14 +155,6 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
               />
               <Stack direction={"row"} spacing={"10px"}>
                 <TextField
-                  label="น้ำหนักสุทธิ"
-                  name="weight"
-                  onChange={formik.handleChange}
-                  type="number"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  required
-                />
-                <TextField
                   label="ราคาเริ่มต้น"
                   name="price"
                   onChange={formik.handleChange}
@@ -177,7 +163,7 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
                   required
                 />
               </Stack>
-              <Stack direction={"row"} alignItems={"center"} spacing={"4px"}>
+              <Stack sx={{ width: "100%" }} direction={"row"} alignItems={"center"} spacing={"4px"}>
                 <Title>ไม่จำกัดเวลา: </Title>
                 <IOSSwitch checked={noLimitTime} onClick={() => setNoLimitTime(!noLimitTime)} />
               </Stack>

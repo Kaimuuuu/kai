@@ -46,7 +46,6 @@ export default function MenuCard({ menuItem, quantity, onAdd, onRemove }: Props)
           </div>
           <Stack sx={{ width: "100%" }}>
             <SubHeading>{menuItem.name}</SubHeading>
-            <Body>{`น้ำหนัก: ${menuItem.weight}`}</Body>
             <Body>{menuItem.description}</Body>
             <Stack direction={"row"} alignItems={"center"} sx={{ marginTop: "auto" }}>
               <Body bold>{`ราคา: ${menuItem.price}฿`}</Body>

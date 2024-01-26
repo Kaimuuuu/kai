@@ -20,11 +20,15 @@ export default function QrCode() {
   const router = useRouter();
 
   useEffect(() => {
-    if (token) {
+    if (token && isLoading) {
       me(token).catch((err) => {
         router.push("/login");
       });
+    }
+  }, [token, isLoading]);
 
+  useEffect(() => {
+    if (token) {
       getQrCode(token)
         .then((qrCodesCard) => {
           setQrCodes(qrCodesCard);
@@ -54,7 +58,7 @@ export default function QrCode() {
         <Stack alignItems={"center"} spacing={"10px"}>
           <TextField label="ค้นหาตามเลขโต๊ะ" />
           {qrCodes.map((qr) => (
-            <QrCodeCard qrCode={qr} key={qr.tableNumber} refreshQrCodes={refreshing} />
+            <QrCodeCard qrCode={qr} key={qr.token} refreshQrCodes={refreshing} />
           ))}
         </Stack>
       </Container>

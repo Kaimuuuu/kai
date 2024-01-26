@@ -2,22 +2,48 @@ import { Box, Stack, Card as MuiCard } from "@mui/material";
 import Heading from "../typo/heading";
 import Button from "../button";
 import Card from "../card";
-import { EmployeeRole, Order, OrderStatus } from "@/types";
+import {
+  EmployeeRole,
+  Order,
+  OrderItem,
+  OrderStatus,
+  UpdateOrderItemStatus,
+  UpdateOrderItemStatusRequest,
+} from "@/types";
 import Title from "../typo/title";
 import Body from "../typo/body";
 import { updateOrderStatus } from "@/services/orderService";
 import Swal from "sweetalert2";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
 import useRole from "@/hooks/useRole";
+import Checkbox from "../checkbox";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import copy from "@/util/copy";
 
 interface Props {
   order: Order;
   refreshOrders: () => void;
+  changedOrderItems: UpdateOrderItemStatus[];
+  setChangedOrderItems: Dispatch<SetStateAction<UpdateOrderItemStatus[]>>;
+  clearChangedOrderItems: boolean;
 }
 
-export default function OrderCard({ order, refreshOrders }: Props) {
+export default function OrderCard({
+  order,
+  refreshOrders,
+  changedOrderItems,
+  setChangedOrderItems,
+  clearChangedOrderItems,
+}: Props) {
   const token = useEmployeeToken();
   const role = useRole();
+  const [orderItems, setOrderItems] = useState<OrderItem[]>(order.orderItems);
+  const [backupOrderItems, setBackupOrderItems] = useState<OrderItem[]>(copy(order.orderItems));
+
+  useEffect(() => {
+    setOrderItems(copy(backupOrderItems));
+    setChangedOrderItems([]);
+  }, [clearChangedOrderItems]);
 
   const onUpdate = (status: OrderStatus) => {
     Swal.fire({
@@ -49,6 +75,24 @@ export default function OrderCard({ order, refreshOrders }: Props) {
     });
   };
 
+  const onClickCheckbox = (item: OrderItem) => {
+    item.isComplete = !item.isComplete;
+    setOrderItems([...orderItems]);
+
+    const req: UpdateOrderItemStatus = {
+      orderId: order.id,
+      menuItemId: item.menuItemId,
+      status: item.isComplete,
+    };
+    const find = changedOrderItems.find((item) => item.menuItemId === req.menuItemId);
+    if (find) {
+      const filtered = changedOrderItems.filter((item) => item.menuItemId !== req.menuItemId);
+      setChangedOrderItems(filtered);
+    } else {
+      setChangedOrderItems([...changedOrderItems, req]);
+    }
+  };
+
   return (
     <MuiCard sx={{ borderRadius: "16px", width: "100%" }}>
       <Stack sx={{ padding: "10px" }} spacing="10px">
@@ -59,8 +103,9 @@ export default function OrderCard({ order, refreshOrders }: Props) {
           </Box>
         </Stack>
         <Stack padding={1} bgcolor={"#E6E6E5"} borderRadius={"10px"} spacing={"10px"}>
-          {order.orderItems.map((item) => (
-            <Stack direction={"row"} key={item.name}>
+          {orderItems.map((item) => (
+            <Stack direction={"row"} key={item.name} alignItems={"center"}>
+              <Checkbox checked={item.isComplete} onClick={() => onClickCheckbox(item)} />
               <Title>{item.name}</Title>
               <Stack direction={"row"} marginLeft={"auto"} spacing={"4px"}>
                 {item.outOfStock && <Card label={`หมด`} bgcolor="#000000" />}

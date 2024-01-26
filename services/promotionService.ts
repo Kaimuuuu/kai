@@ -2,7 +2,6 @@ import {
   CreatePromotionRequest,
   EmployeeRole,
   ErrorResponse,
-  MenuItem,
   Promotion,
   PromotionMenuItem,
   PromotionMenuItemType,
@@ -24,35 +23,6 @@ export async function getPromotions(token: string, role: EmployeeRole) {
     ...promotion,
     editable: role === EmployeeRole.Admin ? true : false,
   }));
-}
-
-export async function generateQrCode(
-  token: string,
-  promotionId: string,
-  tableNumber: string,
-  size: string,
-) {
-  const res = await fetch(`${process.env.BACKEND_URL}/client`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      promotionId: promotionId,
-      tableNumber: Number(tableNumber),
-      size: Number(size),
-    }),
-  });
-
-  if (res.status !== StatusCode.CREATED) {
-    const err: ErrorResponse = await res.json();
-    throw new Error(err.errMessage);
-  }
-
-  const data: { clientToken: string } = await res.json();
-
-  return data.clientToken;
 }
 
 export async function getAllPromotionMenuItems(token: string): Promise<PromotionMenuItem[]> {
@@ -143,17 +113,4 @@ export async function deletePromotion(token: string, promotionId: string): Promi
     const err: ErrorResponse = await res.json();
     throw new Error(err.errMessage);
   }
-}
-
-export async function getWeight(token: string): Promise<number> {
-  const res = await fetch(`${process.env.BACKEND_URL}/promotion/weight`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const data: { weight: number } = await res.json();
-
-  return data.weight;
 }
