@@ -84,9 +84,9 @@ export default function OrderCard({
       menuItemId: item.menuItemId,
       status: item.isComplete,
     };
-    const find = changedOrderItems.find((item) => item.menuItemId === req.menuItemId);
+    const find = changedOrderItems.find((item) => item.orderId === req.orderId);
     if (find) {
-      const filtered = changedOrderItems.filter((item) => item.menuItemId !== req.menuItemId);
+      const filtered = changedOrderItems.filter((item) => item.orderId !== req.orderId);
       setChangedOrderItems(filtered);
     } else {
       setChangedOrderItems([...changedOrderItems, req]);

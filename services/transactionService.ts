@@ -9,6 +9,11 @@ export async function getCheckoutSummary(clientToken: string, employeeToken: str
     },
   });
 
+  if (res.status !== StatusCode.OK) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
+  }
+
   const data: CheckoutSummaryObject = await res.json();
 
   return data;
