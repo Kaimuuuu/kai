@@ -70,7 +70,6 @@ export default function Order() {
     }).then((result) => {
       if (result.isConfirmed) {
         setChangedOrderItems([]);
-        refreshing();
         if (!changedOrderItems.length) {
           Swal.fire({
             title: "อัพเดจสถานะคำสั่งอาหารสำเร็จ",
@@ -81,6 +80,7 @@ export default function Order() {
         }
         updateOrderItemsStatus(token, changedOrderItems)
           .then(() => {
+            refreshing();
             Swal.fire({
               title: "อัพเดจสถานะคำสั่งอาหารสำเร็จ",
               icon: "success",

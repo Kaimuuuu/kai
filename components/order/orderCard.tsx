@@ -75,7 +75,7 @@ export default function OrderCard({
     });
   };
 
-  console.log(changedOrderItems)
+  console.log(changedOrderItems);
 
   const onClickCheckbox = (item: OrderItem) => {
     item.isComplete = !item.isComplete;
@@ -86,9 +86,13 @@ export default function OrderCard({
       menuItemId: item.menuItemId,
       status: item.isComplete,
     };
-    const find = changedOrderItems.find((item) => item.orderId === req.orderId && item.menuItemId === req.menuItemId);
+    const find = changedOrderItems.find(
+      (item) => item.orderId === req.orderId && item.menuItemId === req.menuItemId,
+    );
     if (find) {
-      const filtered = changedOrderItems.filter((item) => item.orderId !== req.orderId || item.menuItemId !== req.menuItemId);
+      const filtered = changedOrderItems.filter(
+        (item) => item.orderId !== req.orderId || item.menuItemId !== req.menuItemId,
+      );
       setChangedOrderItems(filtered);
     } else {
       setChangedOrderItems([...changedOrderItems, req]);
@@ -107,7 +111,11 @@ export default function OrderCard({
         <Stack padding={1} bgcolor={"#E6E6E5"} borderRadius={"10px"} spacing={"10px"}>
           {orderItems.map((item) => (
             <Stack direction={"row"} key={item.name} alignItems={"center"}>
-              <Checkbox checked={item.isComplete} onClick={() => onClickCheckbox(item)} />
+              <Checkbox
+                checked={item.isComplete}
+                disabled={item.outOfStock}
+                onClick={() => onClickCheckbox(item)}
+              />
               <Title>{item.name}</Title>
               <Stack direction={"row"} marginLeft={"auto"} spacing={"4px"}>
                 {item.outOfStock && <Card label={`หมด`} bgcolor="#000000" />}
