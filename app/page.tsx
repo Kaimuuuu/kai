@@ -41,7 +41,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (isLoading) {
+    if (token && isLoading) {
       meClient(token).catch((err) => {
         router.push("/error/client-token");
       });

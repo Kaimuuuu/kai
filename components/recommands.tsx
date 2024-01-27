@@ -28,9 +28,12 @@ export default function Recommands() {
 
   useEffect(() => {
     if (!isLoading) {
-      const pollingId = setInterval(() => {
-        refreshing();
-      }, 15 * 60 * 1e3);
+      const pollingId = setInterval(
+        () => {
+          refreshing();
+        },
+        15 * 60 * 1e3,
+      );
 
       return () => clearInterval(pollingId);
     }
