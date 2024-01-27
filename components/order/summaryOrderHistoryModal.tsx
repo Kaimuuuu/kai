@@ -48,7 +48,7 @@ export default function SummaryOrderHistoryModal({ state, onOpen, onClose }: Pro
                   spacing={"10px"}
                 >
                   {order.orderItems.map((item) => (
-                    <Stack direction={"row"} key={item.name} alignItems={"center"}>
+                    <Stack direction={"row"} key={item.menuItemId} alignItems={"center"}>
                       <Checkbox checked={item.isComplete} />
                       <Title>{item.name}</Title>
                       <Stack marginLeft={"auto"} direction={"row"} spacing={"4px"}>
