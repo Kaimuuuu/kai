@@ -6,7 +6,7 @@ import MenuCard from "@/components/menu/menuCard";
 import Heading from "@/components/typo/heading";
 import { getMenu } from "@/services/menuService";
 import { CartItem, Menu, MenuItem } from "@/types";
-import { Container, Stack } from "@mui/material";
+import { Card as MuiCard, Container, IconButton, Stack, Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import SummaryOrderHistoryModal from "@/components/order/summaryOrderHistoryModal";
@@ -19,6 +19,7 @@ import useClientToken from "@/hooks/useClientToken";
 import Loading from "@/components/loading";
 import { meClient } from "@/services/authService";
 import { useRouter } from "next/navigation";
+import ShoppingFixedButton from "@/components/shoppingFixedButton";
 
 export default function Home() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -136,10 +137,11 @@ export default function Home() {
     <main
       style={{
         paddingTop: "20px",
-        paddingBottom: "20px",
+        paddingBottom: "80px",
       }}
     >
       <Container>
+        <ShoppingFixedButton itemLength={cart.length} onClick={onOpenSummaryOrderModal} />
         <Recommands />
         <Tags tags={tags} />
         <Stack sx={{ paddingBottom: "12px" }}>
