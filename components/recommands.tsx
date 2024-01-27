@@ -30,7 +30,7 @@ export default function Recommands() {
     if (!isLoading) {
       const pollingId = setInterval(() => {
         refreshing();
-      }, 5 * 1e3);
+      }, 15 * 60 * 1e3);
 
       return () => clearInterval(pollingId);
     }
