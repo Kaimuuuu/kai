@@ -41,13 +41,15 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (token) {
-      if (isLoading) {
-        meClient(token).catch((err) => {
-          router.push("/error/client-token");
-        });
-      }
+    if (isLoading) {
+      meClient(token).catch((err) => {
+        router.push("/error/client-token");
+      });
+    }
+  }, [token, isLoading]);
 
+  useEffect(() => {
+    if (token) {
       getMenu(token)
         .then((menus) => {
           setMenus(menus);
