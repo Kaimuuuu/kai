@@ -110,7 +110,7 @@ export default function OrderCard({
         </Stack>
         <Stack padding={1} bgcolor={"#E6E6E5"} borderRadius={"10px"} spacing={"10px"}>
           {orderItems.map((item) => (
-            <Stack direction={"row"} key={item.name} alignItems={"center"}>
+            <Stack direction={"row"} key={item.menuItemId} alignItems={"center"}>
               <Checkbox
                 checked={item.isComplete}
                 disabled={item.outOfStock}
