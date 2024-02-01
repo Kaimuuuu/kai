@@ -10,7 +10,7 @@ const modalStyle = {
   boxShadow: 24,
   p: "10px",
   borderRadius: "16px",
-  height: "80%",
+  height: "90%",
 };
 
 interface Props {
