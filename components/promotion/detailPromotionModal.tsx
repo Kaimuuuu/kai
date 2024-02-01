@@ -1,5 +1,4 @@
 import { Box, MenuItem, Modal, Select, Stack } from "@mui/material";
-import ModalStack from "../modalStack";
 import TextField from "../textField";
 import Title from "../typo/title";
 import Button from "../button";
@@ -17,6 +16,7 @@ import {
 import useSearch from "@/hooks/useSearch";
 import MyImage from "../image";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
+import LimitHeightModalStack from "../limitHeightModalStack";
 
 interface Props {
   promotion: Promotion;
@@ -54,7 +54,7 @@ export default function DetailPromotionModal({ promotion, state, onOpen, onClose
   return (
     <Modal open={state} onClose={onClose}>
       <Box>
-        <ModalStack>
+        <LimitHeightModalStack>
           <Stack direction={"row"} spacing="12px">
             <div>
               <div
@@ -138,8 +138,7 @@ export default function DetailPromotionModal({ promotion, state, onOpen, onClose
             bgcolor={"#E6E6E5"}
             padding={"8px"}
             spacing={"10px"}
-            minHeight={"330px"}
-            maxHeight={"330px"}
+            height={"100%"}
             sx={{ overflowY: "auto" }}
           >
             {filteredPromotionMenuItemsType.map((promotionMenuItem) => (
@@ -188,7 +187,7 @@ export default function DetailPromotionModal({ promotion, state, onOpen, onClose
             ))}
           </Stack>
           <Button label="ปิด" myVariant="secondary" onClick={onClose} />
-        </ModalStack>
+        </LimitHeightModalStack>
       </Box>
     </Modal>
   );

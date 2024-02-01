@@ -1,5 +1,4 @@
 import { Box, MenuItem, Modal, Select, Stack } from "@mui/material";
-import ModalStack from "../modalStack";
 import TextField from "../textField";
 import Title from "../typo/title";
 import IOSSwitch from "../switch";
@@ -23,6 +22,7 @@ import { uploadImage } from "@/services/imageService";
 import MyImage from "../image";
 import Body from "../typo/body";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
+import LimitHeightModalStack from "../limitHeightModalStack";
 
 interface Props {
   state: boolean;
@@ -128,7 +128,7 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
   return (
     <Modal open={state} onClose={onClose}>
       <form onSubmit={formik.handleSubmit}>
-        <ModalStack>
+        <LimitHeightModalStack>
           <Stack direction={"row"} spacing="12px">
             <div>
               <input type="file" id="image" style={{ display: "none" }} onChange={onChangeImage} />
@@ -235,9 +235,8 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
             bgcolor={"#E6E6E5"}
             padding={"8px"}
             spacing={"10px"}
-            minHeight={"330px"}
-            maxHeight={"330px"}
             sx={{ overflowY: "auto" }}
+            height={"100%"}
           >
             {filteredPromotionMenuItemsType.map((promotionMenuItem) => (
               <Stack
@@ -285,7 +284,7 @@ export default function NewPromotionModal({ state, onOpen, onClose, refreshPromo
           </Stack>
           <Button label="สร้างโปรโมชั่น" myVariant="primary" type="submit" />
           <Button label="ปิด" myVariant="secondary" onClick={onClose} />
-        </ModalStack>
+        </LimitHeightModalStack>
       </form>
     </Modal>
   );

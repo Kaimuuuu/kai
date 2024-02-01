@@ -1,5 +1,4 @@
 import { Box, Modal, Stack } from "@mui/material";
-import ModalStack from "../modalStack";
 import Heading from "../typo/heading";
 import SubHeading from "../typo/subHeading";
 import Body from "../typo/body";
@@ -12,6 +11,7 @@ import { CheckoutSummaryObject } from "@/types";
 import Swal from "sweetalert2";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
 import { checkout, getCheckoutSummary } from "@/services/transactionService";
+import LimitHeightModalStack from "../limitHeightModalStack";
 
 interface Props {
   state: boolean;
@@ -74,7 +74,7 @@ export default function CheckoutSummaryModal({
   return (
     <Modal open={state} onClose={onClose}>
       <Box>
-        <ModalStack>
+        <LimitHeightModalStack>
           <Heading>เช็คบิล</Heading>
           <Stack bgcolor={"#E6E6E5"} p={1} borderRadius={"16px"}>
             <Body>{`โต๊ะที่: ${checkoutSummary.tableNumber}`}</Body>
@@ -88,8 +88,7 @@ export default function CheckoutSummaryModal({
             bgcolor={"#E6E6E5"}
             p={1}
             borderRadius={"16px"}
-            minHeight={"420px"}
-            maxHeight={"420px"}
+            height={"100%"}
             sx={{ overflowY: "auto" }}
             spacing={"4px"}
           >
@@ -121,7 +120,7 @@ export default function CheckoutSummaryModal({
           </Stack>
           <Button label="ยืนยัน" onClick={onCheckout} />
           <Button label="ปิด" myVariant="secondary" onClick={onClose} />
-        </ModalStack>
+        </LimitHeightModalStack>
       </Box>
     </Modal>
   );

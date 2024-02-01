@@ -10,14 +10,14 @@ const modalStyle = {
   boxShadow: 24,
   p: "10px",
   borderRadius: "16px",
-  maxHeight: "80%",
+  height: "80%",
 };
 
 interface Props {
   children: React.ReactNode;
 }
 
-export default function ModalStack({ children }: Props) {
+export default function LimitHeightModalStack({ children }: Props) {
   return (
     <Stack sx={modalStyle} spacing={"10px"}>
       <>{children}</>
