@@ -35,6 +35,8 @@ export default function CheckoutSummaryModal({
     promotionName: "",
     remainingDuration: 0,
     totalPrice: 0,
+    startPrice: 0,
+    orderPrice: 0,
     orderItems: [],
     createdAt: "",
   });
@@ -92,7 +94,7 @@ export default function CheckoutSummaryModal({
             spacing={"4px"}
           >
             {checkoutSummary.orderItems.map((orderItem) => (
-              <Stack direction={"row"} key={orderItem.name}>
+              <Stack direction={"row"} key={orderItem.menuItemId}>
                 <Title>{orderItem.name}</Title>
                 <Stack direction={"row"} sx={{ marginLeft: "auto" }} spacing={"4px"}>
                   <Card label={`${orderItem.price}฿`} bgcolor="#D12600" />
@@ -101,8 +103,19 @@ export default function CheckoutSummaryModal({
               </Stack>
             ))}
           </Stack>
-          <Stack direction={"row"} padding={1} bgcolor={"#E6E6E5"} borderRadius={"10px"}>
-            <Box sx={{ marginLeft: "auto" }}>
+          <Stack
+            direction={"row"}
+            justifyContent={"space-between"}
+            padding={1}
+            spacing={"4px"}
+            bgcolor={"#E6E6E5"}
+            borderRadius={"10px"}
+          >
+            <Stack direction={"row"} spacing={"4px"}>
+              <Card label={`ราคาเริ่มต้น: ${checkoutSummary.startPrice}฿`} bgcolor="#D12600" />
+              <Card label={`ราคาคำสั่งอาหาร: ${checkoutSummary.orderPrice}฿`} bgcolor="#D12600" />
+            </Stack>
+            <Box>
               <Card label={`ราคารวม: ${checkoutSummary.totalPrice}฿`} bgcolor="#D12600" />
             </Box>
           </Stack>

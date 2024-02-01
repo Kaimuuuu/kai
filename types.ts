@@ -100,6 +100,8 @@ export interface CheckoutSummaryObject {
   remainingDuration: number;
   createdAt: string;
   totalPrice: number;
+  startPrice: number;
+  orderPrice: number;
   orderItems: OrderItem[];
 }
 
