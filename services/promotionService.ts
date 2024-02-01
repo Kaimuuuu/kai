@@ -32,6 +32,7 @@ export async function getAllPromotionMenuItems(token: string): Promise<Promotion
   return menuItems.map((menuItem) => ({
     type: PromotionMenuItemType.None,
     menuItem: menuItem,
+    limit: 10,
   }));
 }
 
@@ -54,13 +55,16 @@ export async function getPromotionMenuItems(
       (target) => target.menuItem.id === promotionMenuItem.menuItem.id,
     );
     let type = promotionMenuItem.type;
+    let limit = 0;
     if (target) {
       type = target.type;
+      limit = target.limit;
     }
 
     return {
       menuItem: promotionMenuItem.menuItem,
       type: type,
+      limit: limit,
     };
   });
 }

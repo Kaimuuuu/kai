@@ -32,6 +32,7 @@ import MyImage from "../image";
 import Body from "../typo/body";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
 import LimitHeightModalStack from "../limitHeightModalStack";
+import ChipTextField from "../chipTextField";
 
 interface Props {
   promotion: Promotion;
@@ -120,6 +121,7 @@ export default function EditPromotionModal({
           .map((promotionMenuItem) => ({
             type: promotionMenuItem.type,
             menuItemId: promotionMenuItem.menuItem.id,
+            limit: promotionMenuItem.limit,
           })),
       };
       updatePromotion(token, req, promotion.id)
@@ -142,6 +144,14 @@ export default function EditPromotionModal({
         });
     },
   });
+
+  const onChangeLimit = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    promotionMenuItem: PromotionMenuItem,
+  ) => {
+    promotionMenuItem.limit = +e.target.value;
+    setPromotionMenuItems([...promotionMenuItems]);
+  };
 
   const onDelete = () => {
     onClose();
@@ -337,7 +347,17 @@ export default function EditPromotionModal({
                     <Title>{SELECT_LABEL_PROMOTION_MENU_ITEM_ALACARTE}</Title>
                   </MenuItem>
                 </Select>
-                <Title>{promotionMenuItem.menuItem.name}</Title>
+                <Box sx={{ width: "100%" }}>
+                  <Title>{promotionMenuItem.menuItem.name}</Title>
+                </Box>
+                <ChipTextField
+                  value={promotionMenuItem.limit}
+                  disabled={promotionMenuItem.type === PromotionMenuItemType.None}
+                  label="จำกัด"
+                  type="number"
+                  InputProps={{ inputProps: { max: 99 } }}
+                  onChange={(e) => onChangeLimit(e, promotionMenuItem)}
+                />
               </Stack>
             ))}
           </Stack>

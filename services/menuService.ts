@@ -5,6 +5,7 @@ import {
   ErrorResponse,
   Menu,
   MenuItem,
+  PromotionMenuItem,
   UpdateMenuRequest,
 } from "@/types";
 
@@ -16,7 +17,12 @@ export async function getMenu(token: string): Promise<Menu[]> {
     },
   });
 
-  const menuItems: MenuItem[] = await res.json();
+  const promotionMenuItems: PromotionMenuItem[] = await res.json();
+
+  const menuItems = promotionMenuItems.flatMap((promotionMenuItem) => ({
+    ...promotionMenuItem.menuItem,
+    limit: promotionMenuItem.limit,
+  }));
 
   return menuItemsToMenuList(menuItems);
 }

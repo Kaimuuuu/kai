@@ -17,6 +17,7 @@ import useSearch from "@/hooks/useSearch";
 import MyImage from "../image";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
 import LimitHeightModalStack from "../limitHeightModalStack";
+import ChipTextField from "../chipTextField";
 
 interface Props {
   promotion: Promotion;
@@ -182,7 +183,10 @@ export default function DetailPromotionModal({ promotion, state, onOpen, onClose
                     <Title>{SELECT_LABEL_PROMOTION_MENU_ITEM_ALACARTE}</Title>
                   </MenuItem>
                 </Select>
-                <Title>{promotionMenuItem.menuItem.name}</Title>
+                <Box sx={{ width: "100%" }}>
+                  <Title>{promotionMenuItem.menuItem.name}</Title>
+                </Box>
+                <ChipTextField disabled label="จำกัด" value={promotionMenuItem.limit} />
               </Stack>
             ))}
           </Stack>

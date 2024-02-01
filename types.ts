@@ -12,6 +12,7 @@ export interface MenuItem {
   outOfStock: boolean;
   imagePath: string;
   editable: boolean;
+  limit: number;
 }
 
 export interface CartItem {
@@ -85,6 +86,7 @@ export interface NavItem {
 export interface PromotionMenuItem {
   type: PromotionMenuItemType;
   menuItem: MenuItem;
+  limit: number;
 }
 
 export enum PromotionMenuItemType {
@@ -111,7 +113,7 @@ export interface CreatePromotionRequest {
   imagePath: string;
   duration: number;
   description: string;
-  promotionMenuItems: { type: PromotionMenuItemType; menuItemId: string }[];
+  promotionMenuItems: { type: PromotionMenuItemType; menuItemId: string; limit: number }[];
 }
 
 export interface UpdatePromotionRequest {
@@ -120,7 +122,7 @@ export interface UpdatePromotionRequest {
   imagePath: string;
   duration: number;
   description: string;
-  promotionMenuItems: { type: PromotionMenuItemType; menuItemId: string }[];
+  promotionMenuItems: { type: PromotionMenuItemType; menuItemId: string; limit: number }[];
 }
 
 export interface CreateMenuRequest {

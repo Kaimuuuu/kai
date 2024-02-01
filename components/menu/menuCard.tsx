@@ -61,7 +61,11 @@ export default function MenuCard({ menuItem, quantity, onAdd, onRemove }: Props)
                   onClick={() => onRemove(menuItem.id)}
                 />
                 <Chip label={String(quantity).padStart(2, "0")} />
-                <Button label="+" disabled={menuItem.outOfStock} onClick={() => onAdd(menuItem)} />
+                <Button
+                  label="+"
+                  disabled={menuItem.outOfStock || quantity >= menuItem.limit}
+                  onClick={() => onAdd(menuItem)}
+                />
               </Stack>
             </Stack>
           </Stack>
