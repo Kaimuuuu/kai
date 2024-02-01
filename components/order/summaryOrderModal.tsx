@@ -58,7 +58,14 @@ export default function SummaryOrderModal({ state, onOpen, onClose, cart, resetC
       <Box>
         <ModalStack>
           <Heading>รายการอาหาร</Heading>
-          <Stack padding={1} bgcolor={"#E6E6E5"} borderRadius={"10px"} spacing={"10px"}>
+          <Stack
+            padding={1}
+            bgcolor={"#E6E6E5"}
+            borderRadius={"10px"}
+            spacing={"10px"}
+            overflow={"hidden"}
+            sx={{ overflowY: "auto" }}
+          >
             {cart.length === 0 ? (
               <Stack direction={"row"}>
                 <Title>ไม่มีเมนูในรถเข็น</Title>
