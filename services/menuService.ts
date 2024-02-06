@@ -27,6 +27,24 @@ export async function getMenu(token: string): Promise<Menu[]> {
   return menuItemsToMenuList(menuItems);
 }
 
+export async function pollMenu(token: string): Promise<Menu[]> {
+  const res = await fetch(`${process.env.BACKEND_URL}/menu/long-polling`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const promotionMenuItems: PromotionMenuItem[] = await res.json();
+
+  const menuItems = promotionMenuItems.flatMap((promotionMenuItem) => ({
+    ...promotionMenuItem.menuItem,
+    limit: promotionMenuItem.limit,
+  }));
+
+  return menuItemsToMenuList(menuItems);
+}
+
 export async function getEditMenu(token: string, role: EmployeeRole): Promise<Menu[]> {
   const res = await fetch(`${process.env.BACKEND_URL}/menu/edit`, {
     method: "GET",

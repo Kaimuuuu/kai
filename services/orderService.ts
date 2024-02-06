@@ -27,6 +27,24 @@ export async function getOrder(token: string): Promise<Order[]> {
   return data;
 }
 
+export async function pollOrder(token: string): Promise<Order[]> {
+  const res = await fetch(`${process.env.BACKEND_URL}/order/pending/long-polling`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (res.status !== StatusCode.OK) {
+    const err: ErrorResponse = await res.json();
+    throw new Error(err.errMessage);
+  }
+
+  const data: Order[] = (await res.json()) ?? [];
+
+  return data;
+}
+
 export async function createOrder(token: string, cart: CartItem[]) {
   const res = await fetch(`${process.env.BACKEND_URL}/order`, {
     method: "POST",

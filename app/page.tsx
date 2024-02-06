@@ -4,7 +4,7 @@ import Button from "@/components/button";
 import TextField from "@/components/textField";
 import MenuCard from "@/components/menu/menuCard";
 import Heading from "@/components/typo/heading";
-import { getMenu } from "@/services/menuService";
+import { getMenu, pollMenu } from "@/services/menuService";
 import { CartItem, Menu, MenuItem } from "@/types";
 import { Card as MuiCard, Container, IconButton, Stack, Box } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -62,13 +62,18 @@ export default function Home() {
 
   useEffect(() => {
     if (!isLoading) {
-      const pollingId = setInterval(() => {
-        refreshing();
-      }, 5 * 1e3);
+      const poll = () => {
+        pollMenu(token)
+          .then((menus) => {
+            setMenus(menus);
+            poll();
+          })
+          .catch((err) => console.log(err));
+      }
 
-      return () => clearInterval(pollingId);
+      poll();
     }
-  }, [refresh, isLoading]);
+  }, [isLoading]);
 
   const tags = menus.map((menu) => menu.catagory);
 

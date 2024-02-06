@@ -7,7 +7,7 @@ import OrderCard from "@/components/order/orderCard";
 import Heading from "@/components/typo/heading";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
 import { me } from "@/services/authService";
-import { getOrder, updateOrderItemsStatus } from "@/services/orderService";
+import { getOrder, pollOrder, updateOrderItemsStatus } from "@/services/orderService";
 import { Order as OrderType, UpdateOrderItemStatus } from "@/types";
 import { Container, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -44,13 +44,18 @@ export default function Order() {
 
   useEffect(() => {
     if (!isLoading) {
-      const pollingId = setInterval(() => {
-        refreshing();
-      }, 5 * 1e3);
+      const poll = () => {
+        pollOrder(token)
+          .then((orders) => {
+            setOrders(orders);
+            poll();
+          })
+          .catch((err) => console.log(err));
+      }
 
-      return () => clearInterval(pollingId);
+      poll();
     }
-  }, [refresh, isLoading]);
+  }, [isLoading]);
 
   const refreshing = () => {
     setRefresh(!refresh);
