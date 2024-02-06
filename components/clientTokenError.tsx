@@ -1,6 +1,6 @@
-import { Box, Container } from "@mui/material";
+import {Box, Container} from "@mui/material";
 
-export default function ErrorClientToken() {
+export default function ClientTokenError() {
   return (
     <main
       style={{
@@ -15,5 +15,5 @@ export default function ErrorClientToken() {
         </Box>
       </Container>
     </main>
-  );
+  )
 }

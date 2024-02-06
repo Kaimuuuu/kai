@@ -6,7 +6,7 @@ import MenuCard from "@/components/menu/menuCard";
 import Heading from "@/components/typo/heading";
 import { getMenu, pollMenu } from "@/services/menuService";
 import { CartItem, Menu, MenuItem } from "@/types";
-import { Card as MuiCard, Container, IconButton, Stack, Box } from "@mui/material";
+import { Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import SummaryOrderHistoryModal from "@/components/order/summaryOrderHistoryModal";
@@ -18,8 +18,8 @@ import { ID_MENU_CATAGORY } from "@/constants";
 import useClientToken from "@/hooks/useClientToken";
 import Loading from "@/components/loading";
 import { meClient } from "@/services/authService";
-import { useRouter } from "next/navigation";
 import ShoppingFixedButton from "@/components/shoppingFixedButton";
+import ClientTokenError from "@/components/clientTokenError";
 
 export default function Home() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -35,22 +35,18 @@ export default function Home() {
   const token = useClientToken();
   const [refresh, setRefresh] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const router = useRouter();
-
-  const refreshing = () => {
-    setRefresh(!refresh);
-  };
+  const [isError, setIsError] = useState<boolean>(false);
 
   useEffect(() => {
     if (token && isLoading) {
       meClient(token).catch((err) => {
-        router.push("/error/client-token");
+        setIsError(true);
       });
     }
   }, [token, isLoading]);
 
   useEffect(() => {
-    if (token) {
+    if (token && !isLoading) {
       getMenu(token)
         .then((menus) => {
           setMenus(menus);
@@ -133,6 +129,10 @@ export default function Home() {
 
   const onOpenSummaryOrderModal = () => setSummaryOrderModal(true);
   const onCloseSummaryOrderModal = () => setSummaryOrderModal(false);
+
+  if (isError) {
+    return <ClientTokenError />;
+  }
 
   if (isLoading) {
     return <Loading />;
