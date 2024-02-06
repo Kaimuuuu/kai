@@ -27,9 +27,10 @@ export async function getOrder(token: string): Promise<Order[]> {
   return data;
 }
 
-export async function pollOrder(token: string): Promise<Order[]> {
+export async function pollOrder(token: string, signal: AbortSignal): Promise<Order[]> {
   const res = await fetch(`${process.env.BACKEND_URL}/order/pending/long-polling`, {
     method: "GET",
+    signal: signal,
     headers: {
       Authorization: `Bearer ${token}`,
     },

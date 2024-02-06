@@ -44,8 +44,11 @@ export default function Order() {
 
   useEffect(() => {
     if (!isLoading) {
+      const abortController = new AbortController();
+      const signal = abortController.signal;
+
       const poll = () => {
-        pollOrder(token)
+        pollOrder(token, signal)
           .then((orders) => {
             setOrders(orders);
             poll();
@@ -54,6 +57,8 @@ export default function Order() {
       }
 
       poll();
+
+      return () => abortController.abort();
     }
   }, [isLoading]);
 
