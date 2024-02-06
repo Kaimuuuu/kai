@@ -46,7 +46,7 @@ export default function Home() {
   }, [token, isLoading]);
 
   useEffect(() => {
-    if (token && !isLoading) {
+    if (token) {
       getMenu(token)
         .then((menus) => {
           setMenus(menus);
