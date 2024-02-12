@@ -7,7 +7,7 @@ import Title from "../typo/title";
 import Card from "../card";
 import Button from "../button";
 import { useEffect, useState } from "react";
-import { CheckoutSummaryObject } from "@/types";
+import { Transaction } from "@/types";
 import Swal from "sweetalert2";
 import useEmployeeToken from "@/hooks/useEmployeeToken";
 import { checkout, getCheckoutSummary } from "@/services/transactionService";
@@ -29,8 +29,9 @@ export default function CheckoutSummaryModal({
   refreshQrCodes,
 }: Props) {
   const token = useEmployeeToken();
-  const [checkoutSummary, setCheckoutSummary] = useState<CheckoutSummaryObject>({
+  const [checkoutSummary, setCheckoutSummary] = useState<Transaction>({
     tableNumber: 0,
+    token: "",
     size: 0,
     promotionName: "",
     remainingDuration: 0,

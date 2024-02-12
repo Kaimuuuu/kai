@@ -95,8 +95,9 @@ export enum PromotionMenuItemType {
   None,
 }
 
-export interface CheckoutSummaryObject {
+export interface Transaction {
   tableNumber: number;
+  token: string;
   promotionName: string;
   size: number;
   remainingDuration: number;

@@ -65,7 +65,7 @@ export default function Home() {
             poll();
           })
           .catch((err) => console.log(err));
-      }
+      };
 
       poll();
     }

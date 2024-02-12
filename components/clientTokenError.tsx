@@ -1,4 +1,4 @@
-import {Box, Container} from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 export default function ClientTokenError() {
   return (
@@ -15,5 +15,5 @@ export default function ClientTokenError() {
         </Box>
       </Container>
     </main>
-  )
+  );
 }

@@ -54,7 +54,7 @@ export default function Order() {
             poll();
           })
           .catch((err) => console.log(err));
-      }
+      };
 
       poll();
 
