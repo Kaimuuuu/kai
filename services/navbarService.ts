@@ -24,6 +24,10 @@ export function getNavbar(role: EmployeeRole): NavItem[] {
           name: "ดูข้อมูลพนักงาน",
           path: "/employee",
         },
+        {
+          name: "ดูข้อมูลธุรกรรม",
+          path: "/transaction",
+        },
       ];
     }
     case EmployeeRole.Chef: {
@@ -55,6 +59,10 @@ export function getNavbar(role: EmployeeRole): NavItem[] {
         {
           name: "ดู Qr Code ทั้งหมด",
           path: "/qrcode",
+        },
+        {
+          name: "ดูข้อมูลธุรกรรม",
+          path: "/transaction",
         },
       ];
     }
