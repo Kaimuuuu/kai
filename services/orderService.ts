@@ -146,21 +146,28 @@ export async function updateOrderItemsStatus(
     }
   });
 
-  col.forEach(async (value: UpdateOrderItemStatusRequest[], orderId: string) => {
-    const res = await fetch(`${process.env.BACKEND_URL}/order/status/${orderId}/items`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        orderItemsStatus: value,
-      }),
-    });
+  let promises = [];
+  for (let orderId of Array.from(col.keys())) {
+    const value = col.get(orderId);
 
-    if (res.status !== StatusCode.OK) {
-      const err: ErrorResponse = await res.json();
-      throw new Error(err.errMessage);
-    }
-  });
+    promises.push(
+      fetch(`${process.env.BACKEND_URL}/order/status/${orderId}/items`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          orderItemsStatus: value,
+        }),
+      }).then(async (res) => {
+        if (res.status !== StatusCode.OK) {
+          const err: ErrorResponse = await res.json();
+          throw new Error(err.errMessage);
+        }
+      }),
+    );
+  }
+
+  await Promise.all(promises);
 }
